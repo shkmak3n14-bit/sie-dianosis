@@ -1,6 +1,6 @@
 /**
  * エニアグラム辞書の公開エントリ
- * center / types / wings / behavior / instincts / reply_style をまとめて export する
+ * center / types / wings / behavior / instincts / reply_style / communication_style をまとめて export する
  */
 
 // ===== 型の export =====
@@ -17,6 +17,12 @@ export {
   getReplyStyleEntry,
   replyStyleDictionary,
 } from './reply_style_dictionary';
+
+export type { CommunicationStyleEntry } from './communication_style_dictionary';
+export {
+  communicationStyleDictionary,
+  getCommunicationStyleEntry,
+} from './communication_style_dictionary';
 
 // ===== 辞書の export =====
 export { gutCenter } from './center/gut';

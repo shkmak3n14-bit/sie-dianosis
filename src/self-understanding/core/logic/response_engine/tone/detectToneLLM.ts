@@ -1,16 +1,38 @@
 // response_engine/tone/detectToneLLM.ts
-// 感情トーン判定（LLM版）
+// 感情トーン判定（LLM版 + オフラインモック）
 
 import { callLLM } from '../../../llm/llm_client';
-import type { ToneType } from '../tone_detector';
+import { detectTone, type ToneType } from '../tone_detector';
 
 export type { ToneType };
 
 /**
  * ユーザー発話の感情トーンを LLM で判定する。
+ * エンドポイント未設定時は本物と同じ JSON 形式のモックを使う。
  * 失敗時・不正値時は calm にフォールバック。
  */
 export async function detectToneLLM(userInput: string): Promise<ToneType> {
+  const raw = !process.env.EXPO_PUBLIC_SAI_LLM_ENDPOINT
+    ? mockToneJson(userInput)
+    : await callLLMForTone(userInput);
+
+  try {
+    const parsed = JSON.parse(extractJson(raw)) as { tone?: string };
+    if (
+      parsed.tone === 'soft' ||
+      parsed.tone === 'calm' ||
+      parsed.tone === 'voice'
+    ) {
+      return parsed.tone;
+    }
+  } catch {
+    // JSON parse error → fallback
+  }
+
+  return 'calm';
+}
+
+async function callLLMForTone(userInput: string): Promise<string> {
   const prompt = `
 あなたはユーザーの発話から「感情トーン」を判定する分類器です。
 
@@ -32,24 +54,15 @@ export async function detectToneLLM(userInput: string): Promise<ToneType> {
 余計な文章は一切書かないでください。
 `;
 
-  const raw = await callLLM(prompt + `\n\nユーザー発話: ${userInput}`, {
+  return callLLM(prompt + `\n\nユーザー発話: ${userInput}`, {
     includePersona: false,
   });
+}
 
-  try {
-    const parsed = JSON.parse(extractJson(raw)) as { tone?: string };
-    if (
-      parsed.tone === 'soft' ||
-      parsed.tone === 'calm' ||
-      parsed.tone === 'voice'
-    ) {
-      return parsed.tone;
-    }
-  } catch {
-    // JSON parse error → fallback
-  }
-
-  return 'calm';
+/** オフライン用：本物と同じ JSON 形式で返す */
+function mockToneJson(userInput: string): string {
+  const tone = detectTone(userInput);
+  return JSON.stringify({ tone });
 }
 
 /** 応答に説明文が混ざっても JSON 部分だけ取り出す */

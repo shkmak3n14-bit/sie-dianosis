@@ -1,18 +1,40 @@
 // response_engine/phase/detectPhaseLLM.ts
-// 会話フェーズ判定（LLM版）
+// 会話フェーズ判定（LLM版 + オフラインモック）
 
 import { callLLM } from '../../../llm/llm_client';
-import type { ConversationPhase } from '../phase_detector';
+import { detectPhase, type ConversationPhase } from '../phase_detector';
 
 export type { ConversationPhase };
 
 /**
  * ユーザー発話の会話フェーズを LLM で判定する。
+ * エンドポイント未設定時は本物と同じ JSON 形式のモックを使う。
  * 失敗時・不正値時は conversation にフォールバック。
  */
 export async function detectPhaseLLM(
   userInput: string
 ): Promise<ConversationPhase> {
+  const raw = !process.env.EXPO_PUBLIC_SAI_LLM_ENDPOINT
+    ? mockPhaseJson(userInput)
+    : await callLLMForPhase(userInput);
+
+  try {
+    const parsed = JSON.parse(extractJson(raw)) as { phase?: string };
+    if (
+      parsed.phase === 'conversation' ||
+      parsed.phase === 'deepening' ||
+      parsed.phase === 'advice'
+    ) {
+      return parsed.phase;
+    }
+  } catch {
+    // JSON parse error → fallback
+  }
+
+  return 'conversation';
+}
+
+async function callLLMForPhase(userInput: string): Promise<string> {
   const prompt = `
 あなたはユーザーの発話から「会話フェーズ」を判定する分類器です。
 
@@ -34,24 +56,15 @@ export async function detectPhaseLLM(
 余計な文章は一切書かないでください。
 `;
 
-  const raw = await callLLM(prompt + `\n\nユーザー発話: ${userInput}`, {
+  return callLLM(prompt + `\n\nユーザー発話: ${userInput}`, {
     includePersona: false,
   });
+}
 
-  try {
-    const parsed = JSON.parse(extractJson(raw)) as { phase?: string };
-    if (
-      parsed.phase === 'conversation' ||
-      parsed.phase === 'deepening' ||
-      parsed.phase === 'advice'
-    ) {
-      return parsed.phase;
-    }
-  } catch {
-    // JSON parse error → fallback
-  }
-
-  return 'conversation';
+/** オフライン用：本物と同じ JSON 形式で返す */
+function mockPhaseJson(userInput: string): string {
+  const phase = detectPhase(userInput);
+  return JSON.stringify({ phase });
 }
 
 /** 応答に説明文が混ざっても JSON 部分だけ取り出す */

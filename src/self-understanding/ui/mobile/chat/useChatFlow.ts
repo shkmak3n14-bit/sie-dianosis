@@ -1,5 +1,5 @@
 // useChatFlow.ts
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   formatAdviceMessage,
   generateAdvice,
@@ -23,11 +23,14 @@ import {
 import { writeResponse } from '../../../core/logic/response_writer';
 import { toSpeechFriendly } from '../../../core/logic/speech_summarizer';
 import { selfUnderstandingMock } from '../mocks/selfUnderstandingMock';
+import {
+  loadChatHistory,
+  saveChatHistory,
+  type ChatFlowMessage,
+} from './chatHistoryStorage';
+import { loadSaiState, saveSaiState } from './saiStateStorage';
 
-export type ChatFlowMessage = {
-  sender: 'user' | 'sie';
-  text: string;
-};
+export type { ChatFlowMessage };
 
 type ConversationContext = {
   type: string | null;
@@ -52,9 +55,11 @@ export function useChatFlow(options: UseChatFlowOptions = {}) {
   const userProfile = buildUserEnneagramProfile(userEnneagramType);
 
   const [messages, setMessages] = useState<ChatFlowMessage[]>([]);
+  const messagesRef = useRef<ChatFlowMessage[]>([]);
   const [saiState, setSaiState] = useState<SaiConversationState>(
     createEmptySaiConversationState
   );
+  const [saiStateReady, setSaiStateReady] = useState(false);
   const [context, setContext] = useState<ConversationContext>({
     type: null,
     label: null,
@@ -64,16 +69,59 @@ export function useChatFlow(options: UseChatFlowOptions = {}) {
     adviceDelivered: false,
   });
 
+  // 起動時に永続化 state / チャット履歴を読み込む（長期相談モード）
+  useEffect(() => {
+    let cancelled = false;
+
+    void (async () => {
+      const [loadedState, loadedMessages] = await Promise.all([
+        loadSaiState(),
+        loadChatHistory(),
+      ]);
+      if (cancelled) {
+        return;
+      }
+      messagesRef.current = loadedMessages;
+      setMessages(loadedMessages);
+      setSaiState(loadedState);
+      setContext((prev) => ({
+        ...prev,
+        adviceDelivered: loadedState.adviceDelivered,
+      }));
+      setSaiStateReady(true);
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  /** state をメモリと AsyncStorage の両方に反映 */
+  const commitSaiState = async (next: SaiConversationState) => {
+    setSaiState(next);
+    await saveSaiState(next);
+  };
+
+  /** メッセージを更新し、直近10件を永続化 */
+  const commitMessages = async (
+    build: (prev: ChatFlowMessage[]) => ChatFlowMessage[]
+  ) => {
+    const next = build(messagesRef.current).slice(-10);
+    messagesRef.current = next;
+    setMessages(next);
+    await saveChatHistory(next);
+  };
+
   const sendMessage = async (text: string) => {
     // ① ユーザーの発言を追加
-    setMessages((prev) => [...prev, { sender: 'user', text }]);
+    await commitMessages((prev) => [...prev, { sender: 'user', text }]);
 
     // ② flow が残っている間は flow を優先
     if (context.type && context.persona && context.remainingSteps.length > 0) {
       const nextStep = context.remainingSteps[0];
       const sieReply = writeResponse(nextStep, context.persona, text);
 
-      setMessages((prev) => [...prev, { sender: 'sie', text: sieReply }]);
+      await commitMessages((prev) => [...prev, { sender: 'sie', text: sieReply }]);
       setContext((prev) => ({
         ...prev,
         remainingSteps: prev.remainingSteps.slice(1),
@@ -88,16 +136,19 @@ export function useChatFlow(options: UseChatFlowOptions = {}) {
       const speechText = toSpeechFriendly(
         formatAdviceMessage(advice, resolveReplyStyle(userProfile))
       );
-      setMessages((prev) => [...prev, { sender: 'sie', text: speechText }]);
+      await commitMessages((prev) => [
+        ...prev,
+        { sender: 'sie', text: speechText },
+      ]);
       setContext((prev) => ({
         ...prev,
         adviceDelivered: true,
       }));
-      setSaiState((prev) => ({
-        ...prev,
+      await commitSaiState({
+        ...saiState,
         adviceDelivered: true,
         lastPhase: 'advice',
-      }));
+      });
       return;
     }
 
@@ -123,18 +174,25 @@ export function useChatFlow(options: UseChatFlowOptions = {}) {
         psychology,
         adviceDelivered: false,
       }));
-      setMessages((prev) => [...prev, { sender: 'sie', text: followUp }]);
+      await commitMessages((prev) => [
+        ...prev,
+        { sender: 'sie', text: followUp },
+      ]);
       return;
     }
 
     // ⑤ フェーズ判定：advice / deepening / conversation → respond へ
+    // 起動直後のレースを避けるため、未準備ならストレージから再読込
+    const activeState = saiStateReady ? saiState : await loadSaiState();
     const {
       text: sieReply,
-      phase,
       state: nextSaiState,
-    } = await respond(text, userProfile, saiState);
-    setSaiState(nextSaiState);
-    setMessages((prev) => [...prev, { sender: 'sie', text: sieReply }]);
+    } = await respond(text, userProfile, activeState);
+    await commitSaiState(nextSaiState);
+    await commitMessages((prev) => [
+      ...prev,
+      { sender: 'sie', text: sieReply },
+    ]);
     setContext((prev) => ({
       ...prev,
       type: null,
@@ -152,15 +210,16 @@ export function useChatFlow(options: UseChatFlowOptions = {}) {
    */
   const sendVoiceMessage = async (audioUri: string) => {
     try {
+      const activeState = saiStateReady ? saiState : await loadSaiState();
       const { text, userInput, state: nextSaiState } = await respondVoiceInput(
         audioUri,
         userProfile,
-        saiState
+        activeState
       );
 
       const spoken = userInput.trim() || '（音声を認識できませんでした）';
-      setSaiState(nextSaiState);
-      setMessages((prev) => [
+      await commitSaiState(nextSaiState);
+      await commitMessages((prev) => [
         ...prev,
         { sender: 'user', text: spoken },
         { sender: 'sie', text },
@@ -176,7 +235,7 @@ export function useChatFlow(options: UseChatFlowOptions = {}) {
     } catch (error) {
       const message =
         error instanceof Error ? error.message : '音声の処理に失敗しました';
-      setMessages((prev) => [
+      await commitMessages((prev) => [
         ...prev,
         {
           sender: 'sie',
@@ -189,5 +248,12 @@ export function useChatFlow(options: UseChatFlowOptions = {}) {
     }
   };
 
-  return { messages, sendMessage, sendVoiceMessage, context, saiState };
+  return {
+    messages,
+    sendMessage,
+    sendVoiceMessage,
+    context,
+    saiState,
+    saiStateReady,
+  };
 }
