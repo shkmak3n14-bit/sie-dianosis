@@ -1,17 +1,34 @@
 // response_engine/flows/writeDeepeningFlow.ts
-// 深まりフェーズ：tone（soft / calm / voice）で3通りに切り替え
+// 深まりフェーズ：tone 切り替え + 人格ニュアンス（framing を薄く）
 
+import { getReplyStyleEntry } from '../../../data/enneagram';
 import { detectTone, type ToneType } from '../tone_detector';
 import type { UserEnneagramProfile } from '../types';
 
 export function writeDeepeningFlow(
   userInput: string,
-  _profile: UserEnneagramProfile,
+  profile: UserEnneagramProfile,
   tone?: ToneType
 ): string {
   const resolvedTone = tone ?? detectTone(userInput);
+  const styleKey = profile.wing || profile.type;
+  const style = getReplyStyleEntry(styleKey);
 
-  switch (resolvedTone) {
+  const base = generateDeepeningResponse(userInput, resolvedTone);
+
+  // 人格ニュアンス（framing を薄く）
+  const nuance = style
+    ? `少しだけ ${style.framing} 観点で整理してみるね。`
+    : '';
+
+  return nuance ? `${nuance}\n\n${base}` : base;
+}
+
+function generateDeepeningResponse(
+  _userInput: string,
+  tone: ToneType
+): string {
+  switch (tone) {
     case 'soft':
       return [
         `そっか、その部分がひっかかったんだね。話してくれてうれしいよ。`,
