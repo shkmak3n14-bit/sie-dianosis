@@ -13,6 +13,11 @@ export type { ToneType } from './tone_detector';
 export { detectTone } from './tone_detector';
 export { detectToneLLM } from './tone/detectToneLLM';
 export { PHASE_KEYWORDS } from './phase_keywords';
+export type { SaiConversationState } from './sai_state';
+export {
+  adjustPhaseWithState,
+  createEmptySaiConversationState,
+} from './sai_state';
 export {
   buildResponsePlan,
   buildUserEnneagramProfile,

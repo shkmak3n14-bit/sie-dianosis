@@ -3,6 +3,7 @@ import { useState } from 'react';
 import {
   formatAdviceMessage,
   generateAdvice,
+  resolveReplyStyle,
 } from '../../../core/logic/advice_engine';
 import {
   EMPTY_PSYCHO_STRUCTURE,
@@ -15,7 +16,9 @@ import { respond } from '../../../core/logic/respond';
 import { respondVoiceInput } from '../../../core/logic/respond_voice';
 import {
   buildUserEnneagramProfile,
+  createEmptySaiConversationState,
   type ResponsePersonaContext,
+  type SaiConversationState,
 } from '../../../core/logic/response_engine';
 import { writeResponse } from '../../../core/logic/response_writer';
 import { toSpeechFriendly } from '../../../core/logic/speech_summarizer';
@@ -34,7 +37,7 @@ type ConversationContext = {
   persona: ResponsePersonaContext | null;
   /** 対話中に蓄積する心理構造 */
   psychology: PsychoStructure;
-  /** flow 完了後の助言をすでに出したか */
+  /** flow 完了後の助言をすでに出したか（saiState と同期） */
   adviceDelivered: boolean;
 };
 
@@ -49,6 +52,9 @@ export function useChatFlow(options: UseChatFlowOptions = {}) {
   const userProfile = buildUserEnneagramProfile(userEnneagramType);
 
   const [messages, setMessages] = useState<ChatFlowMessage[]>([]);
+  const [saiState, setSaiState] = useState<SaiConversationState>(
+    createEmptySaiConversationState
+  );
   const [context, setContext] = useState<ConversationContext>({
     type: null,
     label: null,
@@ -79,11 +85,18 @@ export function useChatFlow(options: UseChatFlowOptions = {}) {
     // ③ flow が全部終わったらタイプ構造の整理（音声向け短文）
     if (context.type && !context.adviceDelivered) {
       const advice = generateAdvice(userProfile);
-      const speechText = toSpeechFriendly(formatAdviceMessage(advice));
+      const speechText = toSpeechFriendly(
+        formatAdviceMessage(advice, resolveReplyStyle(userProfile))
+      );
       setMessages((prev) => [...prev, { sender: 'sie', text: speechText }]);
       setContext((prev) => ({
         ...prev,
         adviceDelivered: true,
+      }));
+      setSaiState((prev) => ({
+        ...prev,
+        adviceDelivered: true,
+        lastPhase: 'advice',
       }));
       return;
     }
@@ -115,7 +128,12 @@ export function useChatFlow(options: UseChatFlowOptions = {}) {
     }
 
     // ⑤ フェーズ判定：advice / deepening / conversation → respond へ
-    const { text: sieReply, phase } = await respond(text, userProfile);
+    const {
+      text: sieReply,
+      phase,
+      state: nextSaiState,
+    } = await respond(text, userProfile, saiState);
+    setSaiState(nextSaiState);
     setMessages((prev) => [...prev, { sender: 'sie', text: sieReply }]);
     setContext((prev) => ({
       ...prev,
@@ -124,7 +142,7 @@ export function useChatFlow(options: UseChatFlowOptions = {}) {
       remainingSteps: [],
       persona: null,
       psychology,
-      adviceDelivered: phase === 'advice',
+      adviceDelivered: nextSaiState.adviceDelivered,
     }));
   };
 
@@ -134,12 +152,14 @@ export function useChatFlow(options: UseChatFlowOptions = {}) {
    */
   const sendVoiceMessage = async (audioUri: string) => {
     try {
-      const { text, phase, userInput } = await respondVoiceInput(
+      const { text, userInput, state: nextSaiState } = await respondVoiceInput(
         audioUri,
-        userProfile
+        userProfile,
+        saiState
       );
 
       const spoken = userInput.trim() || '（音声を認識できませんでした）';
+      setSaiState(nextSaiState);
       setMessages((prev) => [
         ...prev,
         { sender: 'user', text: spoken },
@@ -151,7 +171,7 @@ export function useChatFlow(options: UseChatFlowOptions = {}) {
         label: null,
         remainingSteps: [],
         persona: null,
-        adviceDelivered: phase === 'advice',
+        adviceDelivered: nextSaiState.adviceDelivered,
       }));
     } catch (error) {
       const message =
@@ -169,5 +189,5 @@ export function useChatFlow(options: UseChatFlowOptions = {}) {
     }
   };
 
-  return { messages, sendMessage, sendVoiceMessage, context };
+  return { messages, sendMessage, sendVoiceMessage, context, saiState };
 }

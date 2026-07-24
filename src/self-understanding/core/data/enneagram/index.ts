@@ -1,6 +1,6 @@
 /**
  * エニアグラム辞書の公開エントリ
- * center / types / wings / behavior / instincts をまとめて export する
+ * center / types / wings / behavior / instincts / reply_style をまとめて export する
  */
 
 // ===== 型の export =====
@@ -11,6 +11,12 @@ export type {
   EnneagramInstinctEntry,
   EnneagramTypeEntry,
 } from './schema';
+
+export type { ReplyStyleEntry } from './reply_style_dictionary';
+export {
+  getReplyStyleEntry,
+  replyStyleDictionary,
+} from './reply_style_dictionary';
 
 // ===== 辞書の export =====
 export { gutCenter } from './center/gut';

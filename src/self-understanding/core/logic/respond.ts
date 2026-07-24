@@ -2,6 +2,7 @@
 // チャット（テキスト）入力用の入口
 
 import { generateResponse } from './response_engine/generate';
+import type { SaiConversationState } from './response_engine/sai_state';
 import type { UserEnneagramProfile } from './response_engine/types';
 
 /**
@@ -9,7 +10,8 @@ import type { UserEnneagramProfile } from './response_engine/types';
  */
 export async function respond(
   userInput: string,
-  profile: UserEnneagramProfile
+  profile: UserEnneagramProfile,
+  state: SaiConversationState
 ) {
-  return generateResponse(userInput, profile);
+  return generateResponse(userInput, profile, state);
 }

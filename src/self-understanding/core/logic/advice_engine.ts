@@ -5,10 +5,12 @@ import {
   getEnneagramBehaviorEntry,
   getEnneagramInstinctEntry,
   getEnneagramTypeEntry,
+  getReplyStyleEntry,
   type EnneagramBehaviorEntry,
   type EnneagramCenterEntry,
   type EnneagramInstinctEntry,
   type EnneagramTypeEntry,
+  type ReplyStyleEntry,
 } from '../data/enneagram';
 import type { UserEnneagramProfile } from './response_engine/types';
 
@@ -25,6 +27,7 @@ export type GeneratedAdvice = {
  * - 本能辞書（instincts）
  * - タイプ辞書（type）
  * - センター辞書（center）
+ * - 返答スタイル辞書（reply_style）
  *
  * を統合して「タイプ構造の自然な説明」を生成する。
  */
@@ -47,14 +50,61 @@ export function generateAdvice(
   };
 }
 
-/** チャット表示用に work / stress / growth を1本の文章にする */
-export function formatAdviceMessage(advice: GeneratedAdvice): string {
-  return [
-    'ここまでの対話を踏まえて、あなたの内側で起きやすい動きを、タイプ構造に沿って整理してみました。\n',
+/** プロファイルから返答スタイルを取得（wing 優先） */
+export function resolveReplyStyle(
+  userProfile: UserEnneagramProfile
+): ReplyStyleEntry | null {
+  const key = userProfile.wing || userProfile.type;
+  return getReplyStyleEntry(key);
+}
+
+/** チャット表示用に work / stress / growth を1本の文章にする（人格スタイル反映） */
+export function formatAdviceMessage(
+  advice: GeneratedAdvice,
+  style?: ReplyStyleEntry | null
+): string {
+  const opening = style
+    ? [
+        'ここまでの対話を踏まえて、あなたのタイプに合わせて整理してみたよ。',
+        `${toFramingSentence(style.framing)}`,
+      ].join('\n')
+    : 'ここまでの対話を踏まえて、あなたの内側で起きやすい動きを、タイプ構造に沿って整理してみました。';
+
+  const sections = [
+    opening,
     `【仕事の場面】\n${advice.work}`,
     `【負荷がかかったとき】\n${advice.stress}`,
     `【これから少しずつ整えられる方向】\n${advice.growth}`,
-  ].join('\n\n');
+  ];
+
+  if (style) {
+    sections.push(toEncouragementSentence(style.encouragement));
+  }
+
+  return sections.join('\n\n');
+}
+
+/** framing をサイの語りに変換する */
+function toFramingSentence(framing: string): string {
+  if (framing.endsWith('伝える')) {
+    return `${framing.slice(0, -3)}見ていくね。`;
+  }
+  if (framing.endsWith('説明する')) {
+    return `${framing.slice(0, -4)}見ていくね。`;
+  }
+  return `${framing}ね。`;
+}
+
+/** encouragement をサイの語りに変換する */
+function toEncouragementSentence(encouragement: string): string {
+  const match = encouragement.match(/^(.+?)、と/);
+  if (match) {
+    const core = match[1].trim();
+    return core.endsWith('よ') || core.endsWith('ね')
+      ? core
+      : `${core}よ。`;
+  }
+  return encouragement;
 }
 
 /** 仕事の場面での構造説明 */

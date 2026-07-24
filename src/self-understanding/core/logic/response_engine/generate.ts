@@ -15,6 +15,10 @@ import { writeConversationFlow } from './flows/writeConversationFlow';
 import { writeDeepeningFlow } from './flows/writeDeepeningFlow';
 import type { ConversationPhase } from './phase_detector';
 import { detectPhaseLLM } from './phase/detectPhaseLLM';
+import {
+  adjustPhaseWithState,
+  type SaiConversationState,
+} from './sai_state';
 import { detectToneLLM } from './tone/detectToneLLM';
 import type {
   GeneratedResponse,
@@ -24,20 +28,37 @@ import type {
 export type GenerateResponseResult = {
   text: string;
   phase: ConversationPhase;
+  state: SaiConversationState;
 };
 
 /**
  * response_engine のメイン処理。
- * フェーズ・トーンを LLM で判定し、各 flow へ振り分ける。
+ * フェーズ・トーンを LLM で判定し、会話 state で補正してから各 flow へ振り分ける。
  */
 export async function generateResponse(
   userInput: string,
-  profile: UserEnneagramProfile
+  profile: UserEnneagramProfile,
+  state: SaiConversationState
 ): Promise<GenerateResponseResult> {
-  const phase = await detectPhaseLLM(userInput);
+  // 入力 state を破壊しないようコピーしてから更新する
+  const nextState: SaiConversationState = {
+    lastPhase: state.lastPhase,
+    adviceDelivered: state.adviceDelivered,
+    conversationHistory: [...state.conversationHistory],
+    emotionTrend: [...state.emotionTrend],
+  };
+
+  // ① LLMでフェーズ判定
+  let phase = await detectPhaseLLM(userInput);
+
+  // ② LLMでトーン判定
   const tone = await detectToneLLM(userInput);
 
-  let text: string;
+  // ③ state による補正（最重要）
+  phase = adjustPhaseWithState(phase, nextState);
+
+  // ④ フェーズごとの返答生成
+  let text = '';
   switch (phase) {
     case 'conversation':
       text = writeConversationFlow(userInput, profile, tone);
@@ -49,6 +70,7 @@ export async function generateResponse(
 
     case 'advice':
       text = writeAdviceFlow(profile, userInput, tone);
+      nextState.adviceDelivered = true;
       break;
 
     default:
@@ -56,7 +78,16 @@ export async function generateResponse(
       break;
   }
 
-  return { text, phase };
+  // ⑤ state 更新
+  nextState.lastPhase = phase;
+  nextState.conversationHistory.push(userInput);
+  nextState.emotionTrend.push(tone);
+
+  // 直近5件に制限
+  nextState.conversationHistory = nextState.conversationHistory.slice(-5);
+  nextState.emotionTrend = nextState.emotionTrend.slice(-5);
+
+  return { text, phase, state: nextState };
 }
 
 /**
