@@ -177,6 +177,142 @@ h3 {
 	padding-bottom: 8px;
 }
 
+.enneagram-diagram {
+	margin: 16px 0 20px;
+	padding: 16px;
+	border: 1px solid var(--border);
+	border-radius: 14px;
+	background: linear-gradient(180deg, #ffffff 0%, #f3faf6 100%);
+	text-align: center;
+}
+
+.enneagram-diagram--stress {
+	border-color: #e0d0cc;
+	background: linear-gradient(180deg, #ffffff 0%, #faf5f3 100%);
+}
+
+.enneagram-diagram svg {
+	display: block;
+	width: min(100%, 420px);
+	max-width: 100%;
+	height: auto;
+	margin: 0 auto;
+}
+
+.enneagram-diagram--overview svg {
+	width: min(100%, 520px);
+}
+
+.enneagram-diagram--centers svg {
+	width: min(100%, 520px);
+}
+
+.center-band {
+	stroke-width: 2;
+	fill-opacity: 0.22;
+}
+
+.center-band--instinct {
+	fill: #2f8f63;
+	stroke: #177b53;
+}
+
+.center-band--feeling {
+	fill: #c46a5a;
+	stroke: #a35244;
+}
+
+.center-band--thinking {
+	fill: #4a7f9a;
+	stroke: #356579;
+}
+
+.enneagram-center-labels text {
+	font-size: 14px;
+	font-weight: 700;
+	dominant-baseline: middle;
+	font-family: "Yu Gothic", "Hiragino Kaku Gothic ProN", sans-serif;
+}
+
+.center-label--instinct {
+	fill: #0e5f3f;
+}
+
+.center-label--feeling {
+	fill: #8a4036;
+}
+
+.center-label--thinking {
+	fill: #2d5366;
+}
+
+.enneagram-diagram figcaption {
+	margin-top: 10px;
+	font-size: 0.9rem;
+	color: var(--muted);
+	text-align: left;
+}
+
+.enneagram-ring {
+	fill: none;
+	stroke: #b7d7c8;
+	stroke-width: 2;
+}
+
+.enneagram-diagram--stress .enneagram-ring {
+	stroke: #d4bbb5;
+}
+
+.enneagram-arrows line {
+	stroke: var(--accent);
+	stroke-width: 2.4;
+	stroke-linecap: round;
+}
+
+.enneagram-arrows--stress line {
+	stroke: #8f4d45;
+}
+
+.enneagram-nodes circle {
+	fill: #ffffff;
+	stroke: var(--accent-strong);
+	stroke-width: 2.2;
+}
+
+.enneagram-nodes--stress circle {
+	stroke: #7a3f39;
+}
+
+.enneagram-nodes text {
+	fill: var(--accent-strong);
+	font-size: 16px;
+	font-weight: 700;
+	text-anchor: middle;
+	dominant-baseline: middle;
+	font-family: "Yu Gothic", "Hiragino Kaku Gothic ProN", sans-serif;
+}
+
+.enneagram-nodes--stress text {
+	fill: #7a3f39;
+}
+
+.enneagram-type-labels text {
+	fill: var(--text);
+	font-size: 13px;
+	font-weight: 700;
+	dominant-baseline: middle;
+	font-family: "Yu Gothic", "Hiragino Kaku Gothic ProN", sans-serif;
+}
+
+.enneagram-type-num {
+	fill: var(--accent-strong);
+	font-size: 17px;
+	font-weight: 700;
+	text-anchor: middle;
+	dominant-baseline: middle;
+	font-family: "Yu Gothic", "Hiragino Kaku Gothic ProN", sans-serif;
+}
+
 .type-overview-item .type-detail-btn {
 	padding: 8px 16px;
 	font-size: 0.9rem;
