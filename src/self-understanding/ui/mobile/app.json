@@ -1,0 +1,42 @@
+{
+  "expo": {
+    "name": "サイ 自己理解",
+    "slug": "sie-self-understanding",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#f4f8f6"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSMicrophoneUsageDescription": "サイとの音声会話のためにマイクを使います。"
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#f4f8f6",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      },
+      "permissions": ["RECORD_AUDIO"],
+      "predictiveBackGestureEnabled": false
+    },
+    "plugins": [
+      [
+        "expo-av",
+        {
+          "microphonePermission": "サイとの音声会話のためにマイクを使います。"
+        }
+      ]
+    ],
+    "web": {
+      "favicon": "./assets/favicon.png"
+    }
+  }
+}
