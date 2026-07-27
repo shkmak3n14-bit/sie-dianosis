@@ -13,69 +13,74 @@ export type CommunicationStyleForOtherEntry = {
   tip: string;
 };
 
-export const communicationStyleForOtherDictionary: Record<
+/**
+ * 最小構成:
+ * - safe: 相手が安心して受け取れる伝え方
+ * - avoid: 相手が傷つく・誤解する伝え方
+ * - tip: 関係が前進する伝え方のコツ
+ */
+export const communicationStyles: Record<
   string,
   CommunicationStyleForOtherEntry
 > = {
-  // ===== 純タイプ（1〜9） =====
-  // TODO: 他者理解向けに精緻化。当面は骨格のみ。
   '1': {
-    safe: '誠実さを尊重し、理由と原則を丁寧に示す',
-    avoid: '間違いを強く指摘する言い方',
-    tip: '「意図は正しい」と先に認めてから話すと安心する',
+    safe: '事実ベースで一貫した説明をする',
+    avoid: '曖昧な表現、感情だけの訴え',
+    tip: '正しさが長期的な利益につながる形で話す',
   },
   '2': {
-    safe: '気持ちと貢献を先に認める',
-    avoid: '冷たい言い方・無視・軽視',
-    tip: '「助けられている」と伝えると安心する',
+    safe: '感謝・気持ちを先に伝える',
+    avoid: '冷たい態度、突き放す言い方',
+    tip: '気持ちを短く言語化し、相手の温度感を尊重する',
   },
   '3': {
-    safe: '成果と努力を具体的に認める',
-    avoid: '価値を否定する言い方・比較だけ',
-    tip: '「あなたの強み」を具体的に伝えると響く',
+    safe: '結論を先に、短く明確に伝える',
+    avoid: '長い前置き、非効率な説明',
+    tip: '成果につながる理由を添えると動きが早くなる',
   },
   '4': {
-    safe: '個性と感情を尊重する',
-    avoid: '分類・一般化・浅い言い方',
-    tip: '「あなたらしさ」を守る言い方が安全',
+    safe: '感情の理由を丁寧に共有する',
+    avoid: '表面的な言葉、感情の否定',
+    tip: '本物らしさを尊重しつつ、短く気持ちを伝える',
   },
   '5': {
-    safe: '知的な距離感を保ち、理由を先に示す',
-    avoid: '感情的な押しつけ・曖昧な言い方',
-    tip: '情報と根拠を先に出すと納得しやすい',
+    safe: '事実・根拠を簡潔に伝える',
+    avoid: '感情の押しつけ、急な距離の詰め方',
+    tip: '距離感を尊重しつつ、必要な情報だけ渡す',
   },
   '6': {
-    safe: '安心と根拠を示す',
-    avoid: '急かす・曖昧・重すぎる言い方',
-    tip: '「一緒に考える」姿勢と軽い保証が響く',
+    safe: '安心感を先に与える、理由を丁寧に説明する',
+    avoid: '曖昧な指示、急な変更',
+    tip: '確認行動を否定せず、予測可能性を保つ',
   },
   '7': {
-    safe: '軽く前向きに伝える',
-    avoid: '閉塞感・義務だけを押しつける言い方',
-    tip: '選択肢が見える話し方だと受け取られやすい',
+    safe: '明るく、未来志向で伝える',
+    avoid: '重い話題、ネガティブの押しつけ',
+    tip: '楽しさと目的をセットで伝えると動きが良くなる',
   },
   '8': {
-    safe: '率直に、対等な立場で伝える',
-    avoid: '支配・操作・弱さを突く言い方',
-    tip: '敬意を先に置き、本音で話すと通じやすい',
+    safe: '率直に、短く、事実ベースで伝える',
+    avoid: '遠回し、弱さの押しつけ',
+    tip: '強さを尊重しつつ、境界線を明確にする',
   },
   '9': {
-    safe: '穏やかに、ペースを尊重して伝える',
-    avoid: '急かす・対立を煽る言い方',
-    tip: '「急がなくていい」と伝えると安心する',
+    safe: '穏やかに、ゆっくり、衝突のない言い方',
+    avoid: '強い圧、急な決断の要求',
+    tip: '本音を短く共有し、ペースを尊重する',
   },
-
-  // ===== ウイング（必要に応じて追加） =====
 };
+
+/** 後方互換エイリアス */
+export const communicationStyleForOtherDictionary = communicationStyles;
 
 /** wing 優先。なければ純タイプへフォールバック */
 export function getCommunicationStyleForOtherEntry(
   wingCode: string,
 ): CommunicationStyleForOtherEntry | null {
   const normalized = wingCode.trim();
-  if (communicationStyleForOtherDictionary[normalized]) {
-    return communicationStyleForOtherDictionary[normalized];
+  if (communicationStyles[normalized]) {
+    return communicationStyles[normalized];
   }
   const base = normalized.charAt(0);
-  return communicationStyleForOtherDictionary[base] ?? null;
+  return communicationStyles[base] ?? null;
 }

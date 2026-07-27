@@ -38,13 +38,14 @@ other-understanding/
 │   │   └── misalignment_patterns_dictionary.ts
 │   └── templates/                 # 出力テンプレート
 └── ui/
-    ├── components/
-    ├── screens/
-    ├── cards/
-    └── chat/
+    └── mobile/                    # Expo + RN Paper
+        ├── cards/                 # RelationshipInsightCard
+        ├── components/
+        ├── screens/
+        └── mocks/
 ```
 
-詳細は `core/data/README.md` を参照。
+詳細は `core/data/README.md` / `ui/mobile/README.md` を参照。
 
 ## 制約
 

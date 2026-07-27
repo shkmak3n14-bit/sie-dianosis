@@ -25,6 +25,7 @@ export {
   communicationStyleForOtherDictionary,
   getCommunicationStyleForOtherEntry,
 } from './communication_style_for_other_dictionary';
+export { typeSummary } from './type_summary';
 
 export type {
   ObservationPoint,
@@ -35,6 +36,13 @@ export {
   observationPoints,
   observationPointsDictionary,
 } from './observation_points_dictionary';
+
+export type { ObservationTagsMap } from './observation_tags_dictionary';
+export {
+  getObservationTags,
+  observationTags,
+  scoreObservationTags,
+} from './observation_tags_dictionary';
 
 export type {
   MisalignmentPattern,

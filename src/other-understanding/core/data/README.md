@@ -11,6 +11,7 @@
 | `communication_style_for_other_dictionary.ts` | 相手への伝え方 |
 | `reply_style_for_other_dictionary.ts` | 他者理解時のサイ返答スタイル |
 | `observation_points_dictionary.ts` | ② 観察ポイント・質問案 |
+| `observation_tags_dictionary.ts` | ② 特徴タグ（inference-ready） |
 | `misalignment_patterns_dictionary.ts` | ③ 認知ズレパターン |
 | `index.ts` | まとめて export |
 
