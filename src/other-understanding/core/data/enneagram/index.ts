@@ -36,8 +36,15 @@ export {
   observationPointsDictionary,
 } from './observation_points_dictionary';
 
-export type { MisalignmentPattern } from './misalignment_patterns_dictionary';
-export { misalignmentPatternsDictionary } from './misalignment_patterns_dictionary';
+export type {
+  MisalignmentPattern,
+  MisalignmentPatternEntry,
+  MisalignmentPatternsMatrix,
+} from './misalignment_patterns_dictionary';
+export {
+  misalignmentPatterns,
+  misalignmentPatternsDictionary,
+} from './misalignment_patterns_dictionary';
 
 // ===== 辞書の export（流用） =====
 export { gutCenter } from './center/gut';

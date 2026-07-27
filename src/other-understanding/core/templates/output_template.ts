@@ -20,13 +20,9 @@ export type InferenceOutput = {
 };
 
 export type MisalignmentOutput = {
-  gaps: Array<{
-    consultantLens: string;
-    otherLens: string;
-    scene: string;
-  }>;
-  bridgeHints: string[];
-  deferHints: string[];
+  cognitiveGap: string;
+  frictionPoints: string;
+  adjustmentTips: string;
   boundaries: string[];
 };
 
@@ -66,23 +62,20 @@ export function formatInferenceOutput(output: InferenceOutput): string {
 
 /** 認知ズレ＋境界線の整形 */
 export function formatMisalignmentOutput(output: MisalignmentOutput): string {
-  const gaps = output.gaps
-    .map(
-      (g) =>
-        `- 場面: ${g.scene}\n  あなた: ${g.consultantLens}\n  相手: ${g.otherLens}`,
-    )
-    .join('\n');
   return [
     '【認知のズレ】',
-    gaps || '- （未定義）',
+    output.cognitiveGap || '- （未定義）',
     '',
-    '【ズレを埋めるヒント】',
-    ...output.bridgeHints.map((v) => `- ${v}`),
+    '【摩擦になりやすい点】',
+    output.frictionPoints || '- （未定義）',
     '',
-    '【棚上げしてよい点】',
-    ...output.deferHints.map((v) => `- ${v}`),
+    '【関わり方の調整ヒント】',
+    output.adjustmentTips || '- （未定義）',
     '',
     '【境界線の提案】',
-    ...output.boundaries.map((v) => `- ${v}`),
+    ...(output.boundaries.length > 0
+      ? output.boundaries.map((v) => `- ${v}`)
+      : ['- （未定義）']),
   ].join('\n');
 }
+

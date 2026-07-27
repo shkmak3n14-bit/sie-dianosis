@@ -2,7 +2,10 @@
  * ③ 認知のズレ分析エンジン
  */
 
-import { findMisalignmentPatterns, type MisalignmentPattern } from './patterns';
+import {
+  findMisalignmentPatterns,
+  type MisalignmentPatternEntry,
+} from './patterns';
 
 export type MisalignmentInput = {
   consultantType: string;
@@ -13,13 +16,13 @@ export type MisalignmentInput = {
 };
 
 export type MisalignmentResult = {
-  patterns: MisalignmentPattern[];
-  /** ズレが現れやすい場面 */
-  scenes: string[];
-  /** ズレを埋めるヒント */
-  bridgeHints: string[];
-  /** 埋めずに棚上げすべき点 */
-  deferHints: string[];
+  patterns: MisalignmentPatternEntry[];
+  /** 認知のズレ */
+  cognitiveGaps: string[];
+  /** 摩擦点 */
+  frictionPoints: string[];
+  /** 調整ヒント */
+  adjustmentTips: string[];
 };
 
 export type MisalignmentEngine = {
@@ -35,9 +38,13 @@ export function createMisalignmentEngine(): MisalignmentEngine {
       );
       return {
         patterns,
-        scenes: patterns.flatMap((p) => p.scenes),
-        bridgeHints: patterns.flatMap((p) => p.bridgeHints),
-        deferHints: patterns.flatMap((p) => p.deferHints),
+        cognitiveGaps: patterns.map((p) => p.cognitive_gap).filter(Boolean),
+        frictionPoints: patterns
+          .map((p) => p.friction_points)
+          .filter(Boolean),
+        adjustmentTips: patterns
+          .map((p) => p.adjustment_tips)
+          .filter(Boolean),
       };
     },
   };
