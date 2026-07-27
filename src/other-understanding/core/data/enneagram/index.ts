@@ -26,9 +26,13 @@ export {
   getCommunicationStyleForOtherEntry,
 } from './communication_style_for_other_dictionary';
 
-export type { ObservationPoint } from './observation_points_dictionary';
+export type {
+  ObservationPoint,
+  TypeObservationAxes,
+} from './observation_points_dictionary';
 export {
   actionBasedQuestionsDictionary,
+  observationPoints,
   observationPointsDictionary,
 } from './observation_points_dictionary';
 

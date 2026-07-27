@@ -8,7 +8,10 @@ export {
   buildValuesComparisonPrompt,
 } from './diagnosis_entry';
 
-export { createTypeInferenceEngine } from './type_inference/engine';
+export {
+  createTypeInferenceEngine,
+  typeInferenceEngine,
+} from './type_inference/engine';
 export { createObservationEngine } from './observation/engine';
 export { createMisalignmentEngine } from './misalignment/engine';
 export { createRelationshipAdjustmentEngine } from './relationship_adjustment/engine';

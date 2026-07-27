@@ -1,48 +1,70 @@
 /**
- * ② タイプ候補の整形・確度
+ * ② 候補タイプの並べ替え・確度（仮ロジック）
  */
 
-import type { InferenceRuleHit } from './rules';
+import { observationPoints } from '../data/enneagram/observation_points_dictionary';
+import {
+  calcMatchScore,
+  mapEpisodeToAxes,
+  type EpisodeAxes,
+} from './rules';
 
 export type InferenceConfidence = 'high' | 'medium' | 'low';
 
-export type TypeCandidate = {
-  typeId: string;
-  confidence: InferenceConfidence;
-  reason: string;
+export type TypeScore = {
+  type: string;
   score: number;
 };
 
-function toConfidence(score: number): InferenceConfidence {
-  if (score >= 0.7) return 'high';
-  if (score >= 0.4) return 'medium';
+export type TypeCandidate = {
+  typeId: string;
+  score: number;
+  confidence: InferenceConfidence;
+  reason: string;
+};
+
+/** 全タイプのスコアを計算して高い順に並べる */
+export function inferTypes(episode: string): TypeScore[] {
+  const axes: EpisodeAxes = mapEpisodeToAxes(episode);
+
+  const scores = Object.entries(observationPoints).map(([type, obs]) => ({
+    type,
+    score: calcMatchScore(axes, obs),
+  }));
+
+  scores.sort((a, b) => b.score - a.score);
+  return scores;
+}
+
+/**
+ * 確度はトップと2位のスコア差で決める（仮）
+ * - 差 >= 3 → high
+ * - 差 >= 1 → medium
+ * - それ以外 → low
+ */
+export function calcConfidence(scores: TypeScore[]): InferenceConfidence {
+  if (scores.length === 0) return 'low';
+  if (scores.length === 1) return scores[0].score > 0 ? 'medium' : 'low';
+
+  const top = scores[0].score;
+  const second = scores[1].score;
+  const gap = top - second;
+
+  if (gap >= 3) return 'high';
+  if (gap >= 1) return 'medium';
   return 'low';
 }
 
-/** ルールヒットを候補リストにまとめる */
-export function rankCandidates(hits: InferenceRuleHit[]): TypeCandidate[] {
-  if (hits.length === 0) return [];
-
-  const byType = new Map<string, InferenceRuleHit[]>();
-  for (const hit of hits) {
-    const list = byType.get(hit.typeId) ?? [];
-    list.push(hit);
-    byType.set(hit.typeId, list);
-  }
-
-  const candidates: TypeCandidate[] = [];
-  for (const [typeId, list] of byType) {
-    const score = Math.min(
-      1,
-      list.reduce((sum, h) => sum + h.weight, 0) / list.length,
-    );
-    candidates.push({
-      typeId,
-      score,
-      confidence: toConfidence(score),
-      reason: list.map((h) => h.reason).join(' / '),
-    });
-  }
-
-  return candidates.sort((a, b) => b.score - a.score);
+/** TypeScore[] を TypeCandidate[] に整形（上位 N） */
+export function toCandidates(
+  scores: TypeScore[],
+  confidence: InferenceConfidence,
+  limit = 3,
+): TypeCandidate[] {
+  return scores.slice(0, limit).map((s) => ({
+    typeId: s.type,
+    score: s.score,
+    confidence,
+    reason: '観察ポイントとの一致度に基づく仮推測です',
+  }));
 }
