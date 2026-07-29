@@ -8,5 +8,8 @@
     "target": "ESNext",
     "skipLibCheck": true
   },
-  "include": ["**/*"]
+  "include": [
+    "**/*"
+  ],
+  "extends": "expo/tsconfig.base"
 }
