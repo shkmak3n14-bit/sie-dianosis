@@ -4,7 +4,7 @@
  * 流れ:
  * 1. observationPoints（3軸）を読む
  * 2. エピソードを行動／感情／認知にマッピング
- * 3. 各タイプとのキーワード一致度を計算
+ * 3. 各タイプとのキーワード一致度 + observationTags 一致を計算
  * 4. スコア順に並べる
  * 5. スコア差で確度（高・中・低）を決める
  */
@@ -42,7 +42,8 @@ export type TypeInferenceEngine = {
   infer(input: EpisodeInput): TypeInferenceResult;
 };
 
-const DEFAULT_REASON = '観察ポイントとの一致度に基づく仮推測です';
+const DEFAULT_REASON =
+  '観察ポイントと特徴タグとの一致度に基づく仮推測です';
 
 /** 他者理解モジュールの標準入口（エピソード文字列） */
 export function typeInferenceEngine(episode: string): TypeInferenceResult {

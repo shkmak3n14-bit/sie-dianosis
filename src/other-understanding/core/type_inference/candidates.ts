@@ -4,7 +4,7 @@
 
 import { observationPoints } from '../data/enneagram/observation_points_dictionary';
 import {
-  calcMatchScore,
+  calcCombinedMatchScore,
   mapEpisodeToAxes,
   type EpisodeAxes,
 } from './rules';
@@ -23,13 +23,16 @@ export type TypeCandidate = {
   reason: string;
 };
 
-/** 全タイプのスコアを計算して高い順に並べる */
+const CANDIDATE_REASON =
+  '観察ポイントと特徴タグとの一致度に基づく仮推測です';
+
+/** 全タイプのスコアを計算して高い順に並べる（観察ポイント + observationTags） */
 export function inferTypes(episode: string): TypeScore[] {
   const axes: EpisodeAxes = mapEpisodeToAxes(episode);
 
   const scores = Object.entries(observationPoints).map(([type, obs]) => ({
     type,
-    score: calcMatchScore(axes, obs),
+    score: calcCombinedMatchScore(episode, axes, type, obs),
   }));
 
   scores.sort((a, b) => b.score - a.score);
@@ -65,6 +68,6 @@ export function toCandidates(
     typeId: s.type,
     score: s.score,
     confidence,
-    reason: '観察ポイントとの一致度に基づく仮推測です',
+    reason: CANDIDATE_REASON,
   }));
 }

@@ -1,8 +1,10 @@
 /**
  * ② エピソード → 3軸マッピング ＋ キーワード一致（仮ロジック）
+ * 観察ポイント文との類似度に加え、observationTags による特徴タグ照合を行う。
  */
 
 import type { TypeObservationAxes } from '../data/enneagram/observation_points_dictionary';
+import { getObservationTags } from '../data/enneagram/observation_tags_dictionary';
 
 /** エピソードを3軸テキストに分解した結果 */
 export type EpisodeAxes = {
@@ -138,4 +140,37 @@ export function calcMatchScore(
   score += similarity(episodeAxes.emotion, typeObservation.emotion);
   score += similarity(episodeAxes.cognition, typeObservation.cognition);
   return score;
+}
+
+/**
+ * エピソードと特徴タグ（observationTags）の一致数
+ * 自然文にタグ語が含まれるほどそのタイプのスコアが上がる。
+ */
+export function calcTagMatchScore(episode: string, typeId: string): number {
+  const tags = getObservationTags(typeId);
+  if (!episode || tags.length === 0) return 0;
+
+  const source = episode.toLowerCase();
+  let score = 0;
+  for (const tag of tags) {
+    if (source.includes(tag.toLowerCase())) {
+      score += 1;
+    }
+  }
+  return score;
+}
+
+/**
+ * 観察ポイント一致 + 特徴タグ一致の合計スコア
+ */
+export function calcCombinedMatchScore(
+  episode: string,
+  episodeAxes: EpisodeAxes,
+  typeId: string,
+  typeObservation: TypeObservationAxes,
+): number {
+  return (
+    calcMatchScore(episodeAxes, typeObservation) +
+    calcTagMatchScore(episode, typeId)
+  );
 }
