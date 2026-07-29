@@ -1,11 +1,12 @@
 {
-  "extends": "expo/tsconfig.base",
+  "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
     "strict": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "jsx": "react-native",
+    "moduleResolution": "node",
+    "target": "ESNext",
+    "skipLibCheck": true
   },
-  "include": [
-    "**/*",
-    "../../core/**/*"
-  ]
+  "include": ["**/*"]
 }
