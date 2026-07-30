@@ -2,12 +2,16 @@
 
 Expo + React Native + TypeScript + React Native Paper
 
+**レイヤー方針:** mobile は UI 専用。`core` の TS/TSX を直接 import しない。  
+表示用は `templates/` と `data/`（`core/data` のコピー）を使う。  
+詳細は [`../../LAYERING.md`](../../LAYERING.md)。
+
 ## 画面
 
 1. `RelationshipInsightScreen` — 他者理解カード（Relationship Insight Card）
 
-データは当面 `mocks/relationshipInsightMock.ts`。  
-後で `runRelationshipDiagnosis` の結果を `toRelationshipInsightCard` 経由で接続します。
+データは当面 `mocks/relationshipInsightMock.ts`（`data/enneagram` から組み立て）。  
+後でホストアプリが core パッケージ結果を `toRelationshipInsightCard` に渡します。
 
 ## カード構造
 
@@ -21,6 +25,7 @@ Expo + React Native + TypeScript + React Native Paper
 ```bash
 cd src/other-understanding/ui/mobile
 npm install
+npm run sync:data   # core/data の辞書をコピー
 npm start
 ```
 
@@ -28,9 +33,13 @@ npm start
 
 ```
 mobile/
-├── cards/          # RelationshipInsightCard
-├── components/     # RelationChip / InferenceBadge
-├── screens/        # RelationshipInsightScreen
-├── mocks/          # ダミーデータ
+├── cards/
+├── components/
+├── screens/
+├── templates/      # UI用テンプレート（core と同形のコピー）
+├── data/           # 辞書コピー（type_summary / misalignment 等）
+├── mocks/
+├── scripts/sync-data.js
+├── metro.config.js # core を watch しない
 └── theme.ts
 ```

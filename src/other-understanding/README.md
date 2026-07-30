@@ -1,7 +1,9 @@
 ﻿# other-understanding（他者理解モジュール）
 
 相談者と相手の関係を、エニアグラムの構造で整理する Context です。
-ロジック（`core`）と UI（`ui`）を分離します。
+ロジック（`core`）と UI（`ui/mobile`）を分離します。
+
+層分離は self-understanding と同一ルール → [`LAYERING.md`](./LAYERING.md)
 
 ## 3本柱（入口分岐）
 
@@ -23,33 +25,33 @@
 
 ```
 other-understanding/
-├── core/                          # UI非依存のドメイン層
-│   ├── diagnosis_entry/           # ① 入口・診断誘導・対比
-│   ├── type_inference/            # ② エピソードからタイプ推測
-│   ├── observation/               # ② 観察ポイント・質問案
-│   ├── misalignment/              # ③ 認知のズレ分析
-│   ├── relationship_adjustment/   # ③ 境界線・関わり調整
-│   ├── data/enneagram/            # 辞書（self-understanding と対）
-│   │   ├── schema.ts
-│   │   ├── center/ types/ wings/ instincts/  # 流用
-│   │   ├── communication_style_for_other_dictionary.ts
-│   │   ├── reply_style_for_other_dictionary.ts
-│   │   ├── observation_points_dictionary.ts
-│   │   └── misalignment_patterns_dictionary.ts
-│   └── templates/                 # 出力テンプレート
+├── LAYERING.md
+├── core/                          # ロジック専用（@sie/other-understanding-core 予定）
+│   ├── package.json
+│   ├── diagnosis_entry/
+│   ├── type_inference/
+│   ├── observation/
+│   ├── misalignment/
+│   ├── relationship_adjustment/
+│   ├── data/enneagram/            # 辞書の正本
+│   └── templates/
 └── ui/
-    └── mobile/                    # Expo + RN Paper
-        ├── cards/                 # RelationshipInsightCard
+    └── mobile/                    # UI 専用（core を直接 import しない）
+        ├── cards/
         ├── components/
         ├── screens/
+        ├── templates/             # UI 用（core 非依存）
+        ├── data/enneagram/        # 辞書コピー（npm run sync:data）
         └── mocks/
 ```
 
-詳細は `core/data/README.md` / `ui/mobile/README.md` を参照。
+詳細は `LAYERING.md` / `core/data/README.md` / `ui/mobile/README.md` を参照。
 
 ## 制約
 
-- Core は UI 非依存
+- `core` はロジック専用（UI 非依存）。`ui/mobile` から core の TS/TSX を直接 import しない
+- UI で必要な型・整形は `ui/mobile/templates/`、辞書は `ui/mobile/data/` に置き、`npm run sync:data` で正本と揃える
+- 将来はホストアプリが `@sie/other-understanding-core` を依存してエンジン結果を UI に渡す
 - 自己理解モジュール（`self-understanding`）の診断結果は読み取りのみ
 - `center` / `types` / `wings` / `instincts` は self-understanding から流用（再エクスポート）
 - 相手タイプが未確定のときは推測であることを明示する

@@ -4,7 +4,7 @@ import { Text } from 'react-native-paper';
 import { RelationshipInsightCard } from '../cards/RelationshipInsightCard';
 import { relationshipInsightMock } from '../mocks/relationshipInsightMock';
 import { sieColors } from '../theme';
-import type { RelationshipInsightCardData } from '../../../core/templates/relationship_insight_card';
+import type { RelationshipInsightCardData } from '../templates/relationship_insight_card';
 
 type Props = {
   data?: RelationshipInsightCardData;

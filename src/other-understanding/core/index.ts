@@ -48,3 +48,22 @@ export {
   splitInsightBullets,
   toRelationshipInsightCard,
 } from './templates/relationship_insight_card';
+
+/** 辞書データ（npm 公開時の安定 API 面） */
+export {
+  communicationStyles,
+  communicationStyleForOtherDictionary,
+  getCommunicationStyleForOtherEntry,
+  getObservationTags,
+  misalignmentPatterns,
+  misalignmentPatternsDictionary,
+  observationTags,
+  scoreObservationTags,
+  typeSummary,
+} from './data/enneagram';
+export type {
+  CommunicationStyleForOtherEntry,
+  MisalignmentPatternEntry,
+  MisalignmentPatternsMatrix,
+  ObservationTagsMap,
+} from './data/enneagram';

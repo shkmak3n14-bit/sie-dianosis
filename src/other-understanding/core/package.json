@@ -1,0 +1,31 @@
+{
+  "name": "@sie/other-understanding-core",
+  "version": "0.1.0",
+  "private": true,
+  "description": "他者理解モジュールのロジック層（UI非依存）。将来 npm 公開予定。",
+  "main": "./index.ts",
+  "types": "./index.ts",
+  "exports": {
+    ".": "./index.ts",
+    "./data": "./data/enneagram/index.ts",
+    "./data/*": "./data/enneagram/*"
+  },
+  "files": [
+    "diagnosis_entry",
+    "type_inference",
+    "observation",
+    "misalignment",
+    "relationship_adjustment",
+    "data",
+    "templates",
+    "run_relationship_diagnosis.ts",
+    "index.ts"
+  ],
+  "sideEffects": false,
+  "keywords": [
+    "enneagram",
+    "other-understanding",
+    "sie"
+  ],
+  "license": "UNLICENSED"
+}

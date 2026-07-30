@@ -1,5 +1,6 @@
-import { SAI_PERSONA_PROMPT } from '../../../core/character/sai_persona';
+import { SAI_PERSONA_PROMPT } from '../data/sai_persona';
 import type { ExampleStoryTemplate } from '../data/exampleStoryWeakness';
+
 
 export type SaiLlmPromptInput = {
   userQuestion: string;

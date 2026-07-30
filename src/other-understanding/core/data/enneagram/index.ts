@@ -23,6 +23,7 @@ export {
 export type { CommunicationStyleForOtherEntry } from './communication_style_for_other_dictionary';
 export {
   communicationStyleForOtherDictionary,
+  communicationStyles,
   getCommunicationStyleForOtherEntry,
 } from './communication_style_for_other_dictionary';
 export { typeSummary } from './type_summary';

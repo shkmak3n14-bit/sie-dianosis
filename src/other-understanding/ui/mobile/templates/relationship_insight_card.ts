@@ -1,14 +1,8 @@
 /**
- * 他者理解カード（Relationship Insight Card）
- * relationship_adjustment_engine / runRelationshipDiagnosis の出力を
- * カード形に整形する（core＝ロジック層）。
- *
- * UI 表示用の同形コピーは ui/mobile/templates/relationship_insight_card.ts。
- * mobile からは本ファイルを直接 import しない。
+ * 他者理解カード（Relationship Insight Card）— UI レイヤー用
+ * core 非依存。表示用の型・整形のみを持つ。
+ * core/templates/relationship_insight_card.ts と形を揃える（コピー運用）。
  */
-
-import type { RelationshipDiagnosisResult } from '../run_relationship_diagnosis';
-import type { RelationshipAdjustmentResult } from '../relationship_adjustment/engine';
 
 /** UIカード：8項目＋タイプ情報 */
 export type RelationshipInsightCardData = {
@@ -42,6 +36,27 @@ export type RelationshipInsightSection = {
   displayMode: RelationshipInsightDisplayMode;
 };
 
+/**
+ * エンジン／診断結果と互換の入力（core 型に依存しない構造型）
+ * 後でブリッジ層から流し込む想定。
+ */
+export type RelationshipInsightCardSource = {
+  consultantType?: string;
+  otherType?: string;
+  type_summary: string;
+  cognitive_gap: string;
+  friction_points: string;
+  adjustment_tips: string;
+  communication_safe: string;
+  communication_avoid: string;
+  communication_tip: string;
+  relationship_direction: string;
+  inference?: {
+    isInferred?: boolean;
+    confidence?: 'high' | 'medium' | 'low';
+  };
+};
+
 /** 改行区切りテキストを箇条書き用に分割 */
 export function splitInsightBullets(text: string): string[] {
   if (!text.trim()) return [];
@@ -51,13 +66,9 @@ export function splitInsightBullets(text: string): string[] {
     .filter(Boolean);
 }
 
-/** エンジン結果 → カードデータ */
+/** エンジン互換オブジェクト → カードデータ */
 export function toRelationshipInsightCard(
-  result: RelationshipAdjustmentResult & {
-    consultantType?: string;
-    otherType?: string;
-    inference?: RelationshipDiagnosisResult['inference'];
-  },
+  result: RelationshipInsightCardSource,
   meta?: { relation?: string },
 ): RelationshipInsightCardData {
   return {

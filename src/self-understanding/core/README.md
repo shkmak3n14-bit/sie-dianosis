@@ -5,6 +5,9 @@ UI より先に実装方針を共有するための記録です。
 
 Core は UI 非依存のドメイン層です。画面表示は `ui/mobile/` 側が担当します。
 
+**層分離:** `ui/mobile` から本ディレクトリの TS を直接 import しません（[`../LAYERING.md`](../LAYERING.md)）。  
+将来パッケージ名: `@sie/self-understanding-core`
+
 ---
 
 ## `/logic` — 自己理解モジュールのロジック

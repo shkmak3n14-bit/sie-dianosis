@@ -7,7 +7,7 @@ import {
   type ConversationPhase,
   type SaiConversationState,
   type ToneType,
-} from '../../../core/logic/response_engine';
+} from '../bridge';
 
 const SAI_STATE_KEY = 'sai_state';
 

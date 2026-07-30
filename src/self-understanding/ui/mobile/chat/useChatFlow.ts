@@ -1,27 +1,23 @@
 // useChatFlow.ts
 import { useEffect, useRef, useState } from 'react';
 import {
-  formatAdviceMessage,
-  generateAdvice,
-  resolveReplyStyle,
-} from '../../../core/logic/advice_engine';
-import {
   EMPTY_PSYCHO_STRUCTURE,
-  extractPsychoStructure,
-  mergePsychoStructure,
-  type PsychoStructure,
-} from '../../../core/logic/psycho_extractor';
-import { generateFollowUp } from '../../../core/logic/psycho_followup';
-import { respond } from '../../../core/logic/respond';
-import { respondVoiceInput } from '../../../core/logic/respond_voice';
-import {
   buildUserEnneagramProfile,
   createEmptySaiConversationState,
+  extractPsychoStructure,
+  formatAdviceMessage,
+  generateAdvice,
+  generateFollowUp,
+  mergePsychoStructure,
+  resolveReplyStyle,
+  respond,
+  respondVoiceInput,
+  toSpeechFriendly,
+  writeResponse,
+  type PsychoStructure,
   type ResponsePersonaContext,
   type SaiConversationState,
-} from '../../../core/logic/response_engine';
-import { writeResponse } from '../../../core/logic/response_writer';
-import { toSpeechFriendly } from '../../../core/logic/speech_summarizer';
+} from '../bridge';
 import { selfUnderstandingMock } from '../mocks/selfUnderstandingMock';
 import {
   loadChatHistory,

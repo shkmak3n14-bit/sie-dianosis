@@ -1,0 +1,29 @@
+{
+  "name": "@sie/self-understanding-core",
+  "version": "0.1.0",
+  "private": true,
+  "description": "自己理解モジュールのロジック層（UI非依存）。将来 npm 公開予定。",
+  "main": "./index.ts",
+  "types": "./index.ts",
+  "exports": {
+    ".": "./index.ts",
+    "./data": "./data/enneagram/index.ts",
+    "./data/*": "./data/enneagram/*"
+  },
+  "files": [
+    "character",
+    "data",
+    "diagnosis_engine",
+    "llm",
+    "logic",
+    "questions",
+    "index.ts"
+  ],
+  "sideEffects": false,
+  "keywords": [
+    "enneagram",
+    "self-understanding",
+    "sie"
+  ],
+  "license": "UNLICENSED"
+}

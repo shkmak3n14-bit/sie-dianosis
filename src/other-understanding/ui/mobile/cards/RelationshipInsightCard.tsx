@@ -4,7 +4,7 @@ import {
   buildRelationshipInsightSections,
   type RelationshipInsightCardData,
   type RelationshipInsightSection,
-} from '../../../core/templates/relationship_insight_card';
+} from '../templates/relationship_insight_card';
 import { InferenceBadge } from '../components/InferenceBadge';
 import { RelationChip } from '../components/RelationChip';
 import { sieColors } from '../theme';
