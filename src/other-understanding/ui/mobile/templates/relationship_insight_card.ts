@@ -21,6 +21,10 @@ export type RelationshipInsightCardData = {
   /** 任意：推測であることの表示用 */
   isOtherTypeInferred?: boolean;
   inferenceConfidence?: 'high' | 'medium' | 'low';
+  /** エピソード推論のウイング強度（0〜1） */
+  wingStrength?: number;
+  /** weak / mid / strong */
+  wingLabel?: 'weak' | 'mid' | 'strong';
 };
 
 export type RelationshipInsightDisplayMode = 'paragraph' | 'bullets';

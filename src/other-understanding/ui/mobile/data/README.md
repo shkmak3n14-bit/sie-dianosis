@@ -20,6 +20,11 @@ UI 表示・プレビュー用の辞書コピーです。
 - `communication_style_for_other_dictionary.ts`
 - `observation_tags_dictionary.ts`
 
+### mobile 専用（手動管理）
+
+- `stress_patterns_dictionary.ts`
+- `adjustment_tips_dictionary.ts`
+
 ```bash
 cd src/other-understanding/ui/mobile
 npm run sync:data

@@ -7,6 +7,10 @@ export const sieColors = {
   surfaceSoft: '#eef6f1',
   text: '#193229',
   muted: '#49665a',
+  /** 見出し・本文の主色 */
+  textPrimary: '#193229',
+  /** 補足・本文の副色 */
+  textSecondary: '#49665a',
   accent: '#177b53',
   accentStrong: '#0e5f3f',
   border: '#cfe1d8',

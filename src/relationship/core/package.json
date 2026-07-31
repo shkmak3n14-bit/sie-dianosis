@@ -1,0 +1,35 @@
+{
+  "name": "@sie/relationship-core",
+  "version": "0.1.0",
+  "private": true,
+  "description": "相互理解モジュールのロジック層（UI非依存）。将来 npm 公開予定。",
+  "main": "./index.ts",
+  "types": "./index.ts",
+  "exports": {
+    ".": "./index.ts",
+    "./data": "./data/enneagram/index.ts",
+    "./data/*": "./data/enneagram/*"
+  },
+  "files": [
+    "status",
+    "vicious_cycle",
+    "cognitive_gap",
+    "virtuous_cycle",
+    "respect",
+    "responsibility",
+    "defer",
+    "communication",
+    "data",
+    "templates",
+    "run_mutual_understanding.ts",
+    "index.ts"
+  ],
+  "sideEffects": false,
+  "keywords": [
+    "enneagram",
+    "relationship",
+    "mutual-understanding",
+    "sie"
+  ],
+  "license": "UNLICENSED"
+}

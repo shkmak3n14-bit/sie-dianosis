@@ -30,3 +30,9 @@ export {
   observationTags,
   scoreObservationTags,
 } from './observation_tags_dictionary';
+
+export type { StressPatternEntry } from './stress_patterns_dictionary';
+export { stressPatterns } from './stress_patterns_dictionary';
+
+export type { AdjustmentTipsEntry } from './adjustment_tips_dictionary';
+export { adjustmentTips } from './adjustment_tips_dictionary';

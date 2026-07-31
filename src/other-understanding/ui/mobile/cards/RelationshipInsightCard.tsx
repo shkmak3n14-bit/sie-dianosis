@@ -5,68 +5,99 @@ import {
   type RelationshipInsightCardData,
   type RelationshipInsightSection,
 } from '../templates/relationship_insight_card';
+import { BulletList } from '../components/Bullet';
 import { InferenceBadge } from '../components/InferenceBadge';
 import { RelationChip } from '../components/RelationChip';
+import { Section } from '../components/Section';
 import { sieColors } from '../theme';
 
 type Props = {
   data: RelationshipInsightCardData;
 };
 
+const WING_LABEL_JA = {
+  weak: '弱',
+  mid: '中',
+  strong: '強',
+} as const;
+
 function SectionBody({ section }: { section: RelationshipInsightSection }) {
   if (section.displayMode === 'bullets' && section.bullets.length > 0) {
+    return <BulletList items={section.bullets} />;
+  }
+
+  const text = section.content?.trim();
+  if (!text) {
+    return <Text style={styles.body}>（未定義）</Text>;
+  }
+
+  // 複数行テキストも読みやすく段落表示
+  const lines = text.split('\n').filter(Boolean);
+  if (lines.length > 1) {
     return (
-      <View style={styles.bullets}>
-        {section.bullets.map((line) => (
-          <View key={line} style={styles.bulletRow}>
-            <Text style={styles.bullet}>・</Text>
-            <Text style={styles.body}>{line}</Text>
-          </View>
+      <View style={styles.paragraphs}>
+        {lines.map((line) => (
+          <Text key={line} style={styles.body}>
+            {line}
+          </Text>
         ))}
       </View>
     );
   }
 
-  return <Text style={styles.body}>{section.content || '（未定義）'}</Text>;
+  return <Text style={styles.body}>{text}</Text>;
 }
 
 /**
  * 他者理解カード（Relationship Insight Card）
- * 8項目＋タイプ情報。エンジン出力をそのまま表示する。
+ * 情報量の多い8項目を、区切り・余白・見出し階層で読みやすくする。
  */
 export function RelationshipInsightCard({ data }: Props) {
   const sections = buildRelationshipInsightSections(data);
+  const wingLabelJa = data.wingLabel ? WING_LABEL_JA[data.wingLabel] : null;
 
   return (
     <Card style={styles.card} mode="outlined">
       <Card.Content style={styles.content}>
-        <View style={styles.headerRow}>
-          <Text variant="titleMedium" style={styles.title}>
-            他者理解カード
-          </Text>
+        {/* ヘッダー：タイトル＋ウイング / RelationChip 右上 */}
+        <View style={styles.headerTop}>
+          <View style={styles.titleBlock}>
+            <View style={styles.titleRow}>
+              <Text style={styles.cardTitle}>他者理解カード</Text>
+              {wingLabelJa ? (
+                <View style={styles.wingChip}>
+                  <Text style={styles.wingChipText}>ウイング{wingLabelJa}</Text>
+                </View>
+              ) : null}
+            </View>
+            <Text style={styles.pair}>
+              あなた {data.consultantType || '—'} × 相手 {data.otherType || '—'}
+            </Text>
+            {typeof data.wingStrength === 'number' && data.wingLabel ? (
+              <Text style={styles.wingStrength}>
+                強度 {Math.round(data.wingStrength * 100)}%
+              </Text>
+            ) : null}
+          </View>
           {data.relation ? <RelationChip label={data.relation} /> : null}
         </View>
 
-        <Text style={styles.pair}>
-          あなた {data.consultantType || '—'} × 相手 {data.otherType || '—'}
-        </Text>
-
+        {/* InferenceBadge 右下 */}
         {data.isOtherTypeInferred ? (
-          <InferenceBadge confidence={data.inferenceConfidence} />
+          <View style={styles.badgeRow}>
+            <InferenceBadge confidence={data.inferenceConfidence} />
+          </View>
         ) : null}
 
-        <Divider style={styles.divider} />
-
-        {sections.map((section, index) => (
-          <View key={section.id} style={styles.section}>
-            {index > 0 ? <Divider style={styles.sectionDivider} /> : null}
-            <Text style={styles.sectionTitle}>
-              {section.number}. {section.title}
-              {section.titleEn ? (
-                <Text style={styles.sectionTitleEn}>（{section.titleEn}）</Text>
-              ) : null}
-            </Text>
-            <SectionBody section={section} />
+        {sections.map((section) => (
+          <View key={section.id}>
+            <Divider style={styles.sectionDivider} />
+            <Section
+              title={`${section.number}. ${section.title}`}
+              titleEn={section.titleEn}
+            >
+              <SectionBody section={section} />
+            </Section>
           </View>
         ))}
       </Card.Content>
@@ -76,69 +107,78 @@ export function RelationshipInsightCard({ data }: Props) {
 
 const styles = StyleSheet.create({
   card: {
+    width: '100%',
+    maxWidth: 600,
+    alignSelf: 'center',
     backgroundColor: sieColors.surface,
     borderRadius: 16,
     borderColor: sieColors.border,
   },
   content: {
-    gap: 12,
-    paddingVertical: 6,
+    padding: 16,
+    gap: 0,
   },
-  headerRow: {
+  headerTop: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    justifyContent: 'space-between',
+    gap: 12,
+  },
+  titleBlock: {
+    flex: 1,
+    gap: 6,
+    minWidth: 0,
+  },
+  titleRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    gap: 8,
     flexWrap: 'wrap',
+    gap: 8,
   },
-  title: {
+  cardTitle: {
+    color: sieColors.textPrimary,
+    fontSize: 20,
+    fontWeight: '700',
+    lineHeight: 26,
+  },
+  wingChip: {
+    backgroundColor: sieColors.surfaceSoft,
+    borderColor: sieColors.border,
+    borderWidth: 1,
+    borderRadius: 999,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+  },
+  wingChipText: {
     color: sieColors.accentStrong,
+    fontSize: 12,
     fontWeight: '700',
   },
   pair: {
-    color: sieColors.text,
+    color: sieColors.textPrimary,
     fontSize: 15,
     fontWeight: '600',
+    lineHeight: 22,
   },
-  divider: {
-    backgroundColor: sieColors.border,
-    marginTop: 2,
+  wingStrength: {
+    color: sieColors.textSecondary,
+    fontSize: 12,
+    fontWeight: '600',
   },
-  section: {
-    gap: 8,
+  badgeRow: {
+    marginTop: 12,
+    alignItems: 'flex-end',
   },
   sectionDivider: {
     backgroundColor: sieColors.border,
-    marginBottom: 4,
-  },
-  sectionTitle: {
-    color: sieColors.accentStrong,
-    fontSize: 14,
-    fontWeight: '700',
-  },
-  sectionTitleEn: {
-    color: sieColors.muted,
-    fontSize: 12,
-    fontWeight: '500',
+    marginVertical: 16,
   },
   body: {
-    color: sieColors.muted,
+    color: sieColors.textSecondary,
     fontSize: 15,
     lineHeight: 22,
-    flex: 1,
   },
-  bullets: {
+  paragraphs: {
     gap: 8,
-  },
-  bulletRow: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    gap: 2,
-  },
-  bullet: {
-    color: sieColors.accent,
-    fontSize: 15,
-    lineHeight: 22,
-    fontWeight: '700',
   },
 });

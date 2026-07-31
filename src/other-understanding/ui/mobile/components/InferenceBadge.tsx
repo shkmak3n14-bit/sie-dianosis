@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
   },
   text: {
-    color: sieColors.muted,
+    color: sieColors.textSecondary,
     fontSize: 12,
     fontWeight: '600',
   },

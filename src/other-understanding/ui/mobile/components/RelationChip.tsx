@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
   },
   text: {
-    color: sieColors.accentStrong,
+    color: sieColors.textPrimary,
     fontSize: 13,
     fontWeight: '600',
   },
