@@ -60,10 +60,23 @@ export {
   observationTags,
   scoreObservationTags,
   typeSummary,
+  Type_1w2,
+  Type_2w1,
+  Type_2w3,
+  Type_3w2,
+  Type_3w4,
+  Type_4w3,
+  Type_4w5,
+  emptyOtherTypeBehavior,
+  emptyOtherTypeEntry,
 } from './data/enneagram';
 export type {
   CommunicationStyleForOtherEntry,
   MisalignmentPatternEntry,
   MisalignmentPatternsMatrix,
   ObservationTagsMap,
+  EnneagramTypeCore,
+  EnneagramTypeEntry,
+  OtherTypeBehavior,
+  OtherTypeEntry,
 } from './data/enneagram';

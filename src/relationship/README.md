@@ -17,72 +17,42 @@
 - 自己理解・他者理解の結果は**読み取りのみ**（書き換えない）
 - `other-understanding` の `relationship_adjustment` は「相手への関わり方」であり、本モジュールの関係構造分析とは別物
 
+## 正本と補助（④⑤）
+
+| もの | 役割 |
+|------|------|
+| `data/enneagram/1x1.ts`〜`9x9.ts` | **正本（⑤）** |
+| `pair_registry` + `runMutualUnderstanding` | 正本を返す入口 |
+| `convert/buildRelationship` | **補助（④）** 変換生成。単純結合しない |
+| [`convert/CONVERSION_RULES.md`](./core/convert/CONVERSION_RULES.md) | 変換ルール |
+| [`data/enneagram/CANONICAL.md`](./core/data/enneagram/CANONICAL.md) | 正本運用 |
+
 ## 8本柱（①〜⑧）
+
+`MutualUnderstanding` 型に集約。正本ファイル（NxM.ts）が柱すべてを持つ。
 
 ```
 相互理解モジュール入口
-    ├─ ① status              関係の現状（うまくいっている／いない）
-    ├─ ② vicious_cycle       悪循環の入口
-    ├─ ③ cognitive_gap       認知のズレ（関係版：ズレ×ズレ）
-    ├─ ④ virtuous_cycle      好循環への道筋
-    ├─ ⑤ respect             相手を尊重する方法
-    ├─ ⑥ responsibility      自分の問題か相手の問題か（責務分離）
-    ├─ ⑦ defer               棚上げする決断ポイント
-    └─ ⑧ communication       伝え方の工夫（自分×相手）
+    ├─ status / viciousCycle / cognitiveGap / virtuousCycle
+    └─ respect / responsibility / defer / communication
 ```
-
-| # | 担当 | 辞書（正本: `core/data/enneagram/`） |
-|---|------|--------------------------------------|
-| ① | `status` | `pair_status_dictionary.ts` |
-| ② | `vicious_cycle` | `vicious_cycle_patterns_dictionary.ts` |
-| ③ | `cognitive_gap` | `cognitive_gap_pair_dictionary.ts` |
-| ④ | `virtuous_cycle` | `virtuous_cycle_dictionary.ts` |
-| ⑤ | `respect` | `respect_points_dictionary.ts` |
-| ⑥ | `responsibility` | `responsibility_split_dictionary.ts` |
-| ⑦ | `defer` | `defer_points_dictionary.ts` |
-| ⑧ | `communication` | `communication_pair_dictionary.ts` |
 
 ## 構成
 
 ```
 relationship/
 ├── LAYERING.md
-├── core/                          # ロジック専用（@sie/relationship-core 予定）
-│   ├── package.json
-│   ├── status/
-│   ├── vicious_cycle/
-│   ├── cognitive_gap/
-│   ├── virtuous_cycle/
-│   ├── respect/
-│   ├── responsibility/
-│   ├── defer/
-│   ├── communication/
-│   ├── data/enneagram/            # 辞書の正本（タイプ×タイプ）
-│   ├── templates/
+├── core/
+│   ├── convert/                   # ④ 変換（補助）
+│   ├── types/                     # MutualUnderstanding / Seed
+│   ├── data/enneagram/            # ⑤ 正本 81 + registry
 │   ├── run_mutual_understanding.ts
 │   └── index.ts
-└── ui/
-    └── mobile/                    # UI 専用（core を直接 import しない）
-        ├── flow/
-        ├── screens/
-        ├── cards/
-        ├── components/
-        ├── bridge/
-        ├── templates/
-        ├── data/enneagram/        # 辞書コピー（npm run sync:data）
-        └── mocks/
+└── ui/mobile/
 ```
-
-## 今後の進め方
-
-1. **A** 全体構造 ← 本ディレクトリ（骨格）
-2. **B** ①〜⑧の辞書スキーマ設計の精緻化
-3. **C** 関係パターン辞書（タイプ×タイプ）の中身投入
-4. **D** UI ワイヤーフレーム／画面実装
 
 ## 制約
 
-- `core` はロジック専用（UI 非依存）。`ui/mobile` から core の TS を直接 import しない
-- UI で必要な型・整形は `ui/mobile/templates/`、辞書は `ui/mobile/data/` に置き、`npm run sync:data` で正本と揃える
-- 将来はホストアプリが `@sie/relationship-core` を依存してエンジン結果を UI に渡す
-- 他 Context（`type-engine` / `self-understanding` / `other-understanding`）のファイルは変更しない
+- `core` はロジック専用。`ui/mobile` から core の TS を直接 import しない
+- 本番は正本レジストリを読む。`buildRelationship` で正本を黙って上書きしない
+- 他 Context のファイルは変更しない

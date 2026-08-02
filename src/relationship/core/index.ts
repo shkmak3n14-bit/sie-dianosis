@@ -1,7 +1,8 @@
 /**
- * relationship core 公開入口（骨格）
+ * relationship core 公開入口
  *
  * 相互理解 = 自分 × 相手の関係の説明書（①〜⑧）
+ * ⑤ 正本 = pair 辞書 / ④ 補助 = buildRelationship
  */
 
 export { createStatusEngine } from './status/engine';
@@ -43,8 +44,20 @@ export type {
   CommunicationResult,
 } from './communication/engine';
 
-export { runMutualUnderstanding } from './run_mutual_understanding';
+export {
+  runMutualUnderstanding,
+  runMutualUnderstandingForTypes,
+} from './run_mutual_understanding';
+export type { RunMutualUnderstandingOptions } from './run_mutual_understanding';
 export type { MutualUnderstanding } from './types/mutual_understanding';
+export type { RelationshipTypeSeed } from './types/relationship_type_seed';
+
+export {
+  buildRelationship,
+  buildRelationshipFromCodes,
+  TYPE_SEEDS,
+  getTypeSeed,
+} from './convert';
 
 export {
   formatMutualUnderstandingOutput,
@@ -60,6 +73,11 @@ export {
 
 /** 辞書データ（npm 公開時の安定 API 面） */
 export {
+  toPairKey,
+  normalizeType,
+  getPairEntry,
+  pairDictionary,
+  PAIR_KEYS,
   pairStatusDictionary,
   viciousCyclePatternsDictionary,
   cognitiveGapPairDictionary,

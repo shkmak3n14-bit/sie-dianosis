@@ -11,8 +11,23 @@ export type {
   EnneagramCenterEntry,
   EnneagramInsightEntry,
   EnneagramInstinctEntry,
+  EnneagramTypeCore,
   EnneagramTypeEntry,
+  OtherTypeBehavior,
+  OtherTypeEntry,
 } from './schema';
+export { emptyOtherTypeBehavior, emptyOtherTypeEntry } from './schema';
+
+/** 他者理解正本（profiles）— ②以降で中身投入 */
+export {
+  Type_1w2,
+  Type_2w1,
+  Type_2w3,
+  Type_3w2,
+  Type_3w4,
+  Type_4w3,
+  Type_4w5,
+} from './profiles';
 
 export type { ReplyStyleForOtherEntry } from './reply_style_for_other_dictionary';
 export {
