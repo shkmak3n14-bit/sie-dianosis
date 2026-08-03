@@ -6,7 +6,7 @@ import type { OtherTypeEntry } from '../schema';
  *
  * 偏り注記: 光の体験が薄く、弱い側面（イメージ防衛・責任回避・忖度誘導等）が
  * 前面の標本。平均像ではないが、同構造の体験者向けの他者理解には有用。
- * 観察・固有名詞は含まない。
+ * **健全〜平均の3の見え方は type3w2 を先に参照。** 観察・固有名詞は含まない。
  */
 export const Type_3w4: OtherTypeEntry = {
   code: '3w4',

@@ -21,12 +21,23 @@ export { emptyOtherTypeBehavior, emptyOtherTypeEntry } from './schema';
 /** 他者理解正本（profiles）— ②以降で中身投入 */
 export {
   Type_1w2,
+  Type_1w9,
   Type_2w1,
   Type_2w3,
   Type_3w2,
   Type_3w4,
   Type_4w3,
   Type_4w5,
+  Type_5w4,
+  Type_5w6,
+  Type_6w5,
+  Type_6w7,
+  Type_7w6,
+  Type_7w8,
+  Type_8w7,
+  Type_8w9,
+  Type_9w1,
+  Type_9w8,
 } from './profiles';
 
 export type { ReplyStyleForOtherEntry } from './reply_style_for_other_dictionary';
