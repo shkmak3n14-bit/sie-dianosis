@@ -61,17 +61,49 @@ relationship/
 
 | ペア | 状態 |
 |------|------|
-| `8x9` / `9x8` | **観察反映済み** → [`_ENRICH_8x9.md`](./core/data/enneagram/_ENRICH_8x9.md) |
-| `9x1` / `1x9` | **観察反映済み** → [`_ENRICH_9x1.md`](./core/data/enneagram/_ENRICH_9x1.md) |
+| `8x9` / `9x8` | **観察反映済み**（9w8日常再昇格反映） → [`_ENRICH_8x9.md`](./core/data/enneagram/_ENRICH_8x9.md) |
+| `9x1` / `1x9` | **観察反映済み**（9w1日常再昇格反映） → [`_ENRICH_9x1.md`](./core/data/enneagram/_ENRICH_9x1.md) |
 | `9x3` / `3x9` | **観察反映済み** → [`_ENRICH_9x3.md`](./core/data/enneagram/_ENRICH_9x3.md) |
 | `8x3` / `3x8` | **観察反映済み** → [`_ENRICH_8x3.md`](./core/data/enneagram/_ENRICH_8x3.md) |
 | `9x9` | **観察反映済み** → [`_ENRICH_9x9.md`](./core/data/enneagram/_ENRICH_9x9.md) |
 | `8x8` | **観察反映済み** → [`_ENRICH_8x8.md`](./core/data/enneagram/_ENRICH_8x8.md) |
+| `1x1` | **観察反映済み** → [`_ENRICH_1x1.md`](./core/data/enneagram/_ENRICH_1x1.md) |
+| `2x2` | **観察反映済み** → [`_ENRICH_2x2.md`](./core/data/enneagram/_ENRICH_2x2.md) |
+| `3x3` | **観察反映済み** → [`_ENRICH_3x3.md`](./core/data/enneagram/_ENRICH_3x3.md) |
+| `4x4` | **観察反映済み** → [`_ENRICH_4x4.md`](./core/data/enneagram/_ENRICH_4x4.md) |
+| `5x5` | **観察反映済み** → [`_ENRICH_5x5.md`](./core/data/enneagram/_ENRICH_5x5.md) |
+| `6x6` | **観察反映済み** → [`_ENRICH_6x6.md`](./core/data/enneagram/_ENRICH_6x6.md) |
+| `7x7` | **観察反映済み** → [`_ENRICH_7x7.md`](./core/data/enneagram/_ENRICH_7x7.md) |
 | `9x5` / `5x9` | **観察反映済み** → [`_ENRICH_9x5.md`](./core/data/enneagram/_ENRICH_9x5.md) |
 | `4x5` / `5x4` | **観察反映済み** → [`_ENRICH_4x5.md`](./core/data/enneagram/_ENRICH_4x5.md) |
-| `3x4` / `4x3` | **観察反映済み** → [`_ENRICH_3x4.md`](./core/data/enneagram/_ENRICH_3x4.md) |
-| `7x6` / `6x7` | **観察反映済み** → [`_ENRICH_7x6.md`](./core/data/enneagram/_ENRICH_7x6.md) |
+| `3x4` / `4x3` | **観察反映済み**（4w3日常再昇格反映） → [`_ENRICH_3x4.md`](./core/data/enneagram/_ENRICH_3x4.md) |
+| `3x6` / `6x3` | **観察反映済み** → [`_ENRICH_3x6.md`](./core/data/enneagram/_ENRICH_3x6.md) |
+| `7x6` / `6x7` | **観察反映済み**（6w5日常再昇格微更新） → [`_ENRICH_7x6.md`](./core/data/enneagram/_ENRICH_7x6.md) |
+| `6x5` / `5x6` | **観察反映済み**（5w6・6w5日常再昇格反映） → [`_ENRICH_6x5.md`](./core/data/enneagram/_ENRICH_6x5.md) |
 | `3x2` / `2x3` | **観察反映済み** → [`_ENRICH_3x2.md`](./core/data/enneagram/_ENRICH_3x2.md) |
-| `1x2` / `2x1` | **観察反映済み** → [`_ENRICH_1x2.md`](./core/data/enneagram/_ENRICH_1x2.md) |
-| `7x8` / `8x7` | **観察反映済み** → [`_ENRICH_7x8.md`](./core/data/enneagram/_ENRICH_7x8.md) |
+| `1x2` / `2x1` | **観察反映済み**（1w2日常再昇格反映） → [`_ENRICH_1x2.md`](./core/data/enneagram/_ENRICH_1x2.md) |
+| `1x4` / `4x1` | **観察反映済み** → [`_ENRICH_1x4.md`](./core/data/enneagram/_ENRICH_1x4.md) |
+| `1x3` / `3x1` | **観察反映済み** → [`_ENRICH_1x3.md`](./core/data/enneagram/_ENRICH_1x3.md) |
+| `1x5` / `5x1` | **観察反映済み** → [`_ENRICH_1x5.md`](./core/data/enneagram/_ENRICH_1x5.md) |
+| `1x6` / `6x1` | **観察反映済み** → [`_ENRICH_1x6.md`](./core/data/enneagram/_ENRICH_1x6.md) |
+| `1x7` / `7x1` | **観察反映済み** → [`_ENRICH_1x7.md`](./core/data/enneagram/_ENRICH_1x7.md) |
+| `1x8` / `8x1` | **観察反映済み** → [`_ENRICH_1x8.md`](./core/data/enneagram/_ENRICH_1x8.md) |
+| `2x6` / `6x2` | **観察反映済み** → [`_ENRICH_2x6.md`](./core/data/enneagram/_ENRICH_2x6.md) |
+| `2x7` / `7x2` | **観察反映済み** → [`_ENRICH_2x7.md`](./core/data/enneagram/_ENRICH_2x7.md) |
+| `2x8` / `8x2` | **観察反映済み** → [`_ENRICH_2x8.md`](./core/data/enneagram/_ENRICH_2x8.md) |
+| `2x9` / `9x2` | **観察反映済み** → [`_ENRICH_2x9.md`](./core/data/enneagram/_ENRICH_2x9.md) |
+| `3x7` / `7x3` | **観察反映済み** → [`_ENRICH_3x7.md`](./core/data/enneagram/_ENRICH_3x7.md) |
+| `7x8` / `8x7` | **観察反映済み**（8w7日常再昇格反映） → [`_ENRICH_7x8.md`](./core/data/enneagram/_ENRICH_7x8.md) |
+| `7x9` / `9x7` | **観察反映済み** → [`_ENRICH_7x9.md`](./core/data/enneagram/_ENRICH_7x9.md) |
+| `6x9` / `9x6` | **観察反映済み** → [`_ENRICH_6x9.md`](./core/data/enneagram/_ENRICH_6x9.md) |
+| `6x8` / `8x6` | **観察反映済み** → [`_ENRICH_6x8.md`](./core/data/enneagram/_ENRICH_6x8.md) |
+| `5x8` / `8x5` | **観察反映済み** → [`_ENRICH_5x8.md`](./core/data/enneagram/_ENRICH_5x8.md) |
+| `5x7` / `7x5` | **観察反映済み** → [`_ENRICH_5x7.md`](./core/data/enneagram/_ENRICH_5x7.md) |
+| `4x6` / `6x4` | **観察反映済み** → [`_ENRICH_4x6.md`](./core/data/enneagram/_ENRICH_4x6.md) |
+| `4x7` / `7x4` | **観察反映済み** → [`_ENRICH_4x7.md`](./core/data/enneagram/_ENRICH_4x7.md) |
+| `4x8` / `8x4` | **観察反映済み** → [`_ENRICH_4x8.md`](./core/data/enneagram/_ENRICH_4x8.md) |
+| `4x9` / `9x4` | **観察反映済み** → [`_ENRICH_4x9.md`](./core/data/enneagram/_ENRICH_4x9.md) |
+| `3x5` / `5x3` | **観察反映済み** → [`_ENRICH_3x5.md`](./core/data/enneagram/_ENRICH_3x5.md) |
+| `2x5` / `5x2` | **観察反映済み** → [`_ENRICH_2x5.md`](./core/data/enneagram/_ENRICH_2x5.md) |
+| `2x4` / `4x2` | **観察反映済み** → [`_ENRICH_2x4.md`](./core/data/enneagram/_ENRICH_2x4.md) |
 | その他 | テンプレ寄り（優先ペアから順に厚くする） |

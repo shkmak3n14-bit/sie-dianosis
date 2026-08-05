@@ -35,10 +35,42 @@
 - [`_ENRICH_8x3.md`](./_ENRICH_8x3.md) … `8x3` / `3x8`
 - [`_ENRICH_9x9.md`](./_ENRICH_9x9.md) … `9x9`
 - [`_ENRICH_8x8.md`](./_ENRICH_8x8.md) … `8x8`
+- [`_ENRICH_1x1.md`](./_ENRICH_1x1.md) … `1x1`
+- [`_ENRICH_2x2.md`](./_ENRICH_2x2.md) … `2x2`
+- [`_ENRICH_3x3.md`](./_ENRICH_3x3.md) … `3x3`
+- [`_ENRICH_4x4.md`](./_ENRICH_4x4.md) … `4x4`
+- [`_ENRICH_5x5.md`](./_ENRICH_5x5.md) … `5x5`
+- [`_ENRICH_6x6.md`](./_ENRICH_6x6.md) … `6x6`
+- [`_ENRICH_7x7.md`](./_ENRICH_7x7.md) … `7x7`
 - [`_ENRICH_9x5.md`](./_ENRICH_9x5.md) … `9x5` / `5x9`
 - [`_ENRICH_4x5.md`](./_ENRICH_4x5.md) … `4x5` / `5x4`
 - [`_ENRICH_3x4.md`](./_ENRICH_3x4.md) … `3x4` / `4x3`
 - [`_ENRICH_7x6.md`](./_ENRICH_7x6.md) … `7x6` / `6x7`
+- [`_ENRICH_6x5.md`](./_ENRICH_6x5.md) … `6x5` / `5x6`
 - [`_ENRICH_3x2.md`](./_ENRICH_3x2.md) … `3x2` / `2x3`
 - [`_ENRICH_1x2.md`](./_ENRICH_1x2.md) … `1x2` / `2x1`
+- [`_ENRICH_1x4.md`](./_ENRICH_1x4.md) … `1x4` / `4x1`
+- [`_ENRICH_1x3.md`](./_ENRICH_1x3.md) … `1x3` / `3x1`
+- [`_ENRICH_1x5.md`](./_ENRICH_1x5.md) … `1x5` / `5x1`
+- [`_ENRICH_1x6.md`](./_ENRICH_1x6.md) … `1x6` / `6x1`
+- [`_ENRICH_1x7.md`](./_ENRICH_1x7.md) … `1x7` / `7x1`
+- [`_ENRICH_1x8.md`](./_ENRICH_1x8.md) … `1x8` / `8x1`
+- [`_ENRICH_2x6.md`](./_ENRICH_2x6.md) … `2x6` / `6x2`
+- [`_ENRICH_2x7.md`](./_ENRICH_2x7.md) … `2x7` / `7x2`
+- [`_ENRICH_2x8.md`](./_ENRICH_2x8.md) … `2x8` / `8x2`
+- [`_ENRICH_2x9.md`](./_ENRICH_2x9.md) … `2x9` / `9x2`
+- [`_ENRICH_3x7.md`](./_ENRICH_3x7.md) … `3x7` / `7x3`
 - [`_ENRICH_7x8.md`](./_ENRICH_7x8.md) … `7x8` / `8x7`
+- [`_ENRICH_7x9.md`](./_ENRICH_7x9.md) … `7x9` / `9x7`
+- [`_ENRICH_6x9.md`](./_ENRICH_6x9.md) … `6x9` / `9x6`
+- [`_ENRICH_6x8.md`](./_ENRICH_6x8.md) … `6x8` / `8x6`
+- [`_ENRICH_5x8.md`](./_ENRICH_5x8.md) … `5x8` / `8x5`
+- [`_ENRICH_5x7.md`](./_ENRICH_5x7.md) … `5x7` / `7x5`
+- [`_ENRICH_3x6.md`](./_ENRICH_3x6.md) … `3x6` / `6x3`
+- [`_ENRICH_4x6.md`](./_ENRICH_4x6.md) … `4x6` / `6x4`
+- [`_ENRICH_4x7.md`](./_ENRICH_4x7.md) … `4x7` / `7x4`
+- [`_ENRICH_4x8.md`](./_ENRICH_4x8.md) … `4x8` / `8x4`
+- [`_ENRICH_4x9.md`](./_ENRICH_4x9.md) … `4x9` / `9x4`
+- [`_ENRICH_3x5.md`](./_ENRICH_3x5.md) … `3x5` / `5x3`
+- [`_ENRICH_2x5.md`](./_ENRICH_2x5.md) … `2x5` / `5x2`
+- [`_ENRICH_2x4.md`](./_ENRICH_2x4.md) … `2x4` / `4x2`
