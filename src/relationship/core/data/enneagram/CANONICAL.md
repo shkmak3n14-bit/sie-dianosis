@@ -25,5 +25,20 @@
 ## 柱別の旧辞書ファイルについて
 
 `pair_status_dictionary.ts` 等は骨格時代の分割辞書。  
-現在の正本単位は **`MutualUnderstanding` まるごと 1 ファイル（NxM.ts）**。  
-柱別辞書は将来、正本から導出するか廃止する。
+## 厚み上げログ
+
+優先ペアの観察反映:
+
+- [`_ENRICH_8x9.md`](./_ENRICH_8x9.md) … `8x9` / `9x8`
+- [`_ENRICH_9x1.md`](./_ENRICH_9x1.md) … `9x1` / `1x9`
+- [`_ENRICH_9x3.md`](./_ENRICH_9x3.md) … `9x3` / `3x9`
+- [`_ENRICH_8x3.md`](./_ENRICH_8x3.md) … `8x3` / `3x8`
+- [`_ENRICH_9x9.md`](./_ENRICH_9x9.md) … `9x9`
+- [`_ENRICH_8x8.md`](./_ENRICH_8x8.md) … `8x8`
+- [`_ENRICH_9x5.md`](./_ENRICH_9x5.md) … `9x5` / `5x9`
+- [`_ENRICH_4x5.md`](./_ENRICH_4x5.md) … `4x5` / `5x4`
+- [`_ENRICH_3x4.md`](./_ENRICH_3x4.md) … `3x4` / `4x3`
+- [`_ENRICH_7x6.md`](./_ENRICH_7x6.md) … `7x6` / `6x7`
+- [`_ENRICH_3x2.md`](./_ENRICH_3x2.md) … `3x2` / `2x3`
+- [`_ENRICH_1x2.md`](./_ENRICH_1x2.md) … `1x2` / `2x1`
+- [`_ENRICH_7x8.md`](./_ENRICH_7x8.md) … `7x8` / `8x7`

@@ -56,3 +56,22 @@ relationship/
 - `core` はロジック専用。`ui/mobile` から core の TS を直接 import しない
 - 本番は正本レジストリを読む。`buildRelationship` で正本を黙って上書きしない
 - 他 Context のファイルは変更しない
+
+## 正本の厚み（進行中）
+
+| ペア | 状態 |
+|------|------|
+| `8x9` / `9x8` | **観察反映済み** → [`_ENRICH_8x9.md`](./core/data/enneagram/_ENRICH_8x9.md) |
+| `9x1` / `1x9` | **観察反映済み** → [`_ENRICH_9x1.md`](./core/data/enneagram/_ENRICH_9x1.md) |
+| `9x3` / `3x9` | **観察反映済み** → [`_ENRICH_9x3.md`](./core/data/enneagram/_ENRICH_9x3.md) |
+| `8x3` / `3x8` | **観察反映済み** → [`_ENRICH_8x3.md`](./core/data/enneagram/_ENRICH_8x3.md) |
+| `9x9` | **観察反映済み** → [`_ENRICH_9x9.md`](./core/data/enneagram/_ENRICH_9x9.md) |
+| `8x8` | **観察反映済み** → [`_ENRICH_8x8.md`](./core/data/enneagram/_ENRICH_8x8.md) |
+| `9x5` / `5x9` | **観察反映済み** → [`_ENRICH_9x5.md`](./core/data/enneagram/_ENRICH_9x5.md) |
+| `4x5` / `5x4` | **観察反映済み** → [`_ENRICH_4x5.md`](./core/data/enneagram/_ENRICH_4x5.md) |
+| `3x4` / `4x3` | **観察反映済み** → [`_ENRICH_3x4.md`](./core/data/enneagram/_ENRICH_3x4.md) |
+| `7x6` / `6x7` | **観察反映済み** → [`_ENRICH_7x6.md`](./core/data/enneagram/_ENRICH_7x6.md) |
+| `3x2` / `2x3` | **観察反映済み** → [`_ENRICH_3x2.md`](./core/data/enneagram/_ENRICH_3x2.md) |
+| `1x2` / `2x1` | **観察反映済み** → [`_ENRICH_1x2.md`](./core/data/enneagram/_ENRICH_1x2.md) |
+| `7x8` / `8x7` | **観察反映済み** → [`_ENRICH_7x8.md`](./core/data/enneagram/_ENRICH_7x8.md) |
+| その他 | テンプレ寄り（優先ペアから順に厚くする） |
