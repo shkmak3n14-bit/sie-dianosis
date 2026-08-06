@@ -1,0 +1,135 @@
+/**
+ * 抽象語 → 観察できる行動 の変換テーブル
+ *
+ * self / other / relationship の視点別に整理し、随時拡張する。
+ */
+
+export const abstractToBehavior: Record<string, string> = {
+  // --- self（あなた） ---
+  慎重: '状況をよく見てから動く',
+  保護: '境界線を引いて守る',
+  調整: '相手の状態を見て動きを合わせる',
+  不安: '分からない部分をそのまま伝える',
+  役割: '自分の責任範囲を明確にする',
+  境界: 'ここまでは理解できると伝える',
+  安定: '落ち着いて状況を整理する',
+  予測: '先の展開を考えて行動する',
+  自律: '自分のペースを守って動く',
+  余裕: 'ゆっくり考えてから動く',
+
+  // --- other（相手） ---
+  推進力: 'すぐに行動に移す',
+  効率: '最短ルートを選ぶ',
+  前進: '早く結果を出そうとする',
+  信頼: '理解されると安心する',
+  依存: '支えられると動ける',
+  速度: 'テンポよく進める',
+  直感: '感覚で判断して動く',
+  期待: 'あなたの反応を気にして動く',
+  変化: '状況に合わせてすぐ動く',
+
+  // --- relationship（二人） ---
+  調和: '互いの動きが自然に噛み合う',
+  補完: 'あなたの守りと相手の前進が補い合う',
+  安心: '落ち着いて動ける雰囲気になる',
+  緊張: 'すれ違いが起きやすい',
+  協力: '役割分担がうまくいく',
+  衝突: '意見がぶつかりやすい',
+  すれ違い: '考え方がズレて誤解が起きる',
+  バランス: '互いの強みがちょうどよく働く',
+  雰囲気: '安心して話せる空気になる',
+
+  // --- 拡張（辞書ドメインで頻出） ---
+  推進: 'すぐに行動に移す',
+  守り: '境界線を引いて守る',
+  主導: '先に方向を示す',
+  一貫性: '方針をぶらさず進める',
+  土台: '安心して動ける土台をつくる',
+  成果: '目に見える結果を出す',
+  印象管理: '場に合わせて見え方を整える',
+  印象: '場に合わせた見え方',
+  承認: '認めていると伝える',
+  魅力: '好かれる動きを優先する',
+  役立ち: '相手の役に立つ動きをする',
+  本音: '素の気持ちを出す',
+  弱さ: '不安や限界を出す',
+  圧: '強く決着を急ぐ',
+  決着: '早く結論を出す',
+  撤退: '距離を取って場を離れる',
+  一線: 'これ以上は踏み込まないと伝える',
+  誤解: 'すれ違い',
+  認知のズレ: '考え方の違い',
+  ズレ: '考え方の違い',
+  柔軟: '状況に合わせて変えられる',
+  クレジット: '相手の貢献に敬意を示す',
+  敬意: '相手の貢献を認める',
+  黄信号: '「ちょっと厳しい」と早めに伝える',
+  開示: '短い一言で気持ちを共有する',
+};
+
+/** @deprecated abstractToBehavior を使用 */
+export const ABSTRACT_TO_BEHAVIOR = abstractToBehavior;
+
+/** 視点別（拡張・参照用） */
+export const abstractToBehaviorBySide = {
+  self: {
+    慎重: abstractToBehavior['慎重'],
+    保護: abstractToBehavior['保護'],
+    調整: abstractToBehavior['調整'],
+    不安: abstractToBehavior['不安'],
+    役割: abstractToBehavior['役割'],
+    境界: abstractToBehavior['境界'],
+    安定: abstractToBehavior['安定'],
+    予測: abstractToBehavior['予測'],
+    自律: abstractToBehavior['自律'],
+    余裕: abstractToBehavior['余裕'],
+  },
+  other: {
+    推進力: abstractToBehavior['推進力'],
+    効率: abstractToBehavior['効率'],
+    前進: abstractToBehavior['前進'],
+    信頼: abstractToBehavior['信頼'],
+    依存: abstractToBehavior['依存'],
+    速度: abstractToBehavior['速度'],
+    直感: abstractToBehavior['直感'],
+    期待: abstractToBehavior['期待'],
+    変化: abstractToBehavior['変化'],
+  },
+  relationship: {
+    調和: abstractToBehavior['調和'],
+    補完: abstractToBehavior['補完'],
+    安心: abstractToBehavior['安心'],
+    緊張: abstractToBehavior['緊張'],
+    協力: abstractToBehavior['協力'],
+    衝突: abstractToBehavior['衝突'],
+    すれ違い: abstractToBehavior['すれ違い'],
+    バランス: abstractToBehavior['バランス'],
+    雰囲気: abstractToBehavior['雰囲気'],
+  },
+} as const;
+
+/** 長い語から順に置換（部分一致の衝突を減らす） */
+const SORTED_ABSTRACT_KEYS = Object.keys(abstractToBehavior).sort(
+  (a, b) => b.length - a.length,
+);
+
+/**
+ * 抽象語を観察可能な行動表現へ置換する
+ */
+export function replaceAbstractTerms(text: string): string {
+  let result = text;
+  for (const key of SORTED_ABSTRACT_KEYS) {
+    const value = abstractToBehavior[key];
+    if (!value) continue;
+    result = result.split(key).join(value);
+  }
+  return result;
+}
+
+/**
+ * 単一の抽象語キーを行動表現へ（未知語はそのまま）
+ */
+export function abstractToObservable(term: string): string {
+  const trimmed = term.trim();
+  return abstractToBehavior[trimmed] ?? replaceAbstractTerms(trimmed);
+}

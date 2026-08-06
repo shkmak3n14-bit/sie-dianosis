@@ -14,8 +14,24 @@ type Props = NativeStackScreenProps<
  * 自分タイプ × 相手タイプを確認して洞察画面へ
  */
 export function RelationshipEntryScreen({ navigation }: Props) {
-  const [selfType, setSelfType] = useState('9');
+  const [selfType, setSelfType] = useState('8');
   const [otherType, setOtherType] = useState('3');
+
+  const normalize = (value: string) => {
+    const m = value.match(/[1-9]/);
+    return m ? m[0] : '';
+  };
+
+  const goToInsight = (nextSelfType: string, nextOtherType: string) => {
+    const normalizedSelfType = normalize(nextSelfType);
+    const normalizedOtherType = normalize(nextOtherType);
+    if (!normalizedSelfType || !normalizedOtherType) return;
+
+    navigation.navigate('MutualInsight', {
+      selfType: normalizedSelfType,
+      otherType: normalizedOtherType,
+    });
+  };
 
   return (
     <View style={styles.root}>
@@ -45,14 +61,20 @@ export function RelationshipEntryScreen({ navigation }: Props) {
 
       <Button
         mode="contained"
-        onPress={() =>
-          navigation.navigate('MutualInsight', {
-            selfType,
-            otherType,
-          })
-        }
+        onPress={() => goToInsight(selfType, otherType)}
       >
         関係を見る
+      </Button>
+
+      <Button
+        mode="outlined"
+        onPress={() => {
+          setSelfType('8');
+          setOtherType('3');
+          goToInsight('8', '3');
+        }}
+      >
+        例を見る（8×3）
       </Button>
     </View>
   );

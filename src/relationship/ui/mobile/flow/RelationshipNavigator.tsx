@@ -18,7 +18,7 @@ export function RelationshipNavigator() {
         <Stack.Screen
           name="MutualInsight"
           component={MutualInsightScreen}
-          options={{ title: '関係の説明書' }}
+          options={{ title: '相互理解' }}
         />
       </Stack.Navigator>
     </NavigationContainer>
