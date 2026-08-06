@@ -1,7 +1,7 @@
 /**
  * MutualUnderstanding UI
  *
- * ワイヤー: カテゴリ → 項目 → 本文（3段階）
+ * ワイヤー: カテゴリ → 項目 → 本文
  * - カテゴリボタン縦並び
  * - アコーディオン禁止 / モーダル禁止
  * - Tailwind 相当スタイル:
@@ -11,29 +11,35 @@
  */
 import { useMemo, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { formatMutualUnderstandingForUi } from '../../logic/muUiFormat';
+import { formatDictionaryItemToUiText } from '../../logic/muUiFormat';
 import type { MutualUnderstanding } from '../../templates/mutual_understanding';
 import { buildMuCategories, parsePairKey } from './buildMuCategories';
 
 export type MutualUnderstandingViewProps = {
   relation: MutualUnderstanding;
-  /** true のとき辞書文を3段階UI文章へ変換（default: true） */
+  /**
+   * true のとき abstractToBehavior で抽象語置換する
+   * 自然文モック表示時は false（default）
+   */
   formatForUi?: boolean;
 };
 
 export function MutualUnderstandingView({
   relation,
-  formatForUi = true,
+  formatForUi = false,
 }: MutualUnderstandingViewProps) {
   const { self, other } = parsePairKey(relation.pairKey);
-  const displayRelation = useMemo(
-    () => (formatForUi ? formatMutualUnderstandingForUi(relation) : relation),
-    [formatForUi, relation],
-  );
-  const categories = useMemo(
-    () => buildMuCategories(displayRelation, self, other),
-    [displayRelation, self, other],
-  );
+  const categories = useMemo(() => {
+    const built = buildMuCategories(relation, self, other);
+    if (!formatForUi) return built;
+    return built.map((category) => ({
+      ...category,
+      items: category.items.map((item) => ({
+        ...item,
+        bodies: item.bodies.map((body) => formatDictionaryItemToUiText(body)),
+      })),
+    }));
+  }, [formatForUi, relation, self, other]);
 
   const [activeCategoryKey, setActiveCategoryKey] = useState<string | null>(null);
   const [activeItemId, setActiveItemId] = useState<string | null>(null);

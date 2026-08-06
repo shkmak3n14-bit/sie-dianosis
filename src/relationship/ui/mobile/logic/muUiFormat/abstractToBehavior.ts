@@ -7,7 +7,7 @@
 export const abstractToBehavior: Record<string, string> = {
   // --- self（あなた） ---
   慎重: '状況をよく見てから動く',
-  保護: '境界線を引いて守る',
+  保護: 'ここまでは支える',
   調整: '相手の状態を見て動きを合わせる',
   不安: '分からない部分をそのまま伝える',
   役割: '自分の責任範囲を明確にする',
@@ -27,6 +27,8 @@ export const abstractToBehavior: Record<string, string> = {
   直感: '感覚で判断して動く',
   期待: 'あなたの反応を気にして動く',
   変化: '状況に合わせてすぐ動く',
+  承認不安: '認められない不安で慎重になる',
+  希薄化: '自分の気持ちが分かりにくくなる',
 
   // --- relationship（二人） ---
   調和: '互いの動きが自然に噛み合う',
@@ -36,6 +38,8 @@ export const abstractToBehavior: Record<string, string> = {
   協力: '役割分担がうまくいく',
   衝突: '意見がぶつかりやすい',
   すれ違い: '考え方がズレて誤解が起きる',
+  誤読: '相手の言葉を誤解する',
+  読み合い: '相手の反応を先回りして気遣う',
   バランス: '互いの強みがちょうどよく働く',
   雰囲気: '安心して話せる空気になる',
 
@@ -65,6 +69,8 @@ export const abstractToBehavior: Record<string, string> = {
   敬意: '相手の貢献を認める',
   黄信号: '「ちょっと厳しい」と早めに伝える',
   開示: '短い一言で気持ちを共有する',
+  固定: '同じ反応を繰り返してしまう',
+  固定化: '反応がパターン化して変えにくくなる',
 };
 
 /** @deprecated abstractToBehavior を使用 */
@@ -94,6 +100,8 @@ export const abstractToBehaviorBySide = {
     直感: abstractToBehavior['直感'],
     期待: abstractToBehavior['期待'],
     変化: abstractToBehavior['変化'],
+    承認不安: abstractToBehavior['承認不安'],
+    希薄化: abstractToBehavior['希薄化'],
   },
   relationship: {
     調和: abstractToBehavior['調和'],
@@ -103,6 +111,8 @@ export const abstractToBehaviorBySide = {
     協力: abstractToBehavior['協力'],
     衝突: abstractToBehavior['衝突'],
     すれ違い: abstractToBehavior['すれ違い'],
+    誤読: abstractToBehavior['誤読'],
+    読み合い: abstractToBehavior['読み合い'],
     バランス: abstractToBehavior['バランス'],
     雰囲気: abstractToBehavior['雰囲気'],
   },
@@ -113,17 +123,81 @@ const SORTED_ABSTRACT_KEYS = Object.keys(abstractToBehavior).sort(
   (a, b) => b.length - a.length,
 );
 
+/** 抽象語置換の対象外（複合語・ラベル・辞書固有フレーズ） */
+const PROTECTED_PHRASES = [
+  'タイプ8の調整',
+  'タイプ3の調整',
+  'タイプ8の安心',
+  'タイプ3の安心',
+  '方針の一貫性',
+  '成果承認',
+  '成果積み上げ',
+  '成果偏重',
+  '成果ニーズ',
+  '変化共有',
+  '段階的開示',
+  '強制開示',
+  '全面開示',
+  '素の疲れ開示',
+  '一行開示',
+  '後出し評価',
+  '即時決着',
+  '短い交渉文',
+  '保護の一線',
+  'クレジット付き',
+  '守り切る',
+  'ころころ変化',
+  '弱さ隠蔽',
+  '弱さ否認',
+  '弱さ否定',
+  '決着要求',
+  '本音の空白',
+  '本音の後回し',
+  '役立ちの演技',
+  '見せ方判断',
+  '非効率',
+  '責任ある推進役',
+].sort((a, b) => b.length - a.length);
+
+function protectPhrases(text: string): { text: string; restore: (s: string) => string } {
+  const stored: string[] = [];
+  let result = text;
+  for (const phrase of PROTECTED_PHRASES) {
+    if (!result.includes(phrase)) continue;
+    const token = `\x01${stored.length}\x01`;
+    stored.push(phrase);
+    result = result.split(phrase).join(token);
+  }
+  return {
+    text: result,
+    restore: (s) => {
+      let out = s;
+      for (let i = 0; i < stored.length; i++) {
+        out = out.split(`\x01${i}\x01`).join(stored[i]);
+      }
+      return out;
+    },
+  };
+}
+
 /**
  * 抽象語を観察可能な行動表現へ置換する
  */
 export function replaceAbstractTerms(text: string): string {
-  let result = text;
+  const { text: protectedText, restore } = protectPhrases(text);
+  const placeholders: string[] = [];
+  let result = protectedText;
   for (const key of SORTED_ABSTRACT_KEYS) {
     const value = abstractToBehavior[key];
-    if (!value) continue;
-    result = result.split(key).join(value);
+    if (!value || !result.includes(key)) continue;
+    const placeholder = `\x00${placeholders.length}\x00`;
+    placeholders.push(value);
+    result = result.split(key).join(placeholder);
   }
-  return result;
+  for (let i = 0; i < placeholders.length; i++) {
+    result = result.split(`\x00${i}\x00`).join(placeholders[i]);
+  }
+  return restore(result);
 }
 
 /**
