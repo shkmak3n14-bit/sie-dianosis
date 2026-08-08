@@ -3,16 +3,21 @@ import { FlatList, KeyboardAvoidingView, Platform, StyleSheet } from 'react-nati
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import type { SelfUnderstandingStackParamList } from '../flow/types';
+import { selfUnderstandingMock } from '../mocks/selfUnderstandingMock';
 import { sieColors } from '../theme';
-import { ChatBubble } from './ChatBubble';
+import { ChatMessageList } from './ChatMessageList';
 import { FixedCharacterHeader } from './FixedCharacterHeader';
 import InputBox from './InputBox';
+import { SIE_AVATAR } from './sieAvatar';
 import { useChatFlow, type ChatFlowMessage } from './useChatFlow';
 
 type Props = NativeStackScreenProps<SelfUnderstandingStackParamList, 'Chat'>;
 
 export default function ChatScreen({ route }: Props) {
-  const { messages, sendMessage, sendVoiceMessage } = useChatFlow();
+  const wingCode = selfUnderstandingMock.resultCard.wingCode;
+  const { messages, sendMessage, sendVoiceMessage } = useChatFlow({
+    enneagramType: wingCode,
+  });
   const listRef = useRef<FlatList<ChatFlowMessage>>(null);
   const didSendTemplateRef = useRef(false);
 
@@ -27,20 +32,17 @@ export default function ChatScreen({ route }: Props) {
 
   return (
     <SafeAreaView style={styles.safe} edges={['left', 'right', 'bottom']}>
-      <FixedCharacterHeader name="サイ" />
+      <FixedCharacterHeader name={SIE_AVATAR.name} />
 
       <KeyboardAvoidingView
         style={styles.flex}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         keyboardVerticalOffset={8}
       >
-        <FlatList
-          ref={listRef}
-          data={messages}
-          contentContainerStyle={styles.list}
-          renderItem={({ item }) => <ChatBubble sender={item.sender} text={item.text} />}
-          keyExtractor={(_, index) => index.toString()}
-          onContentSizeChange={() => listRef.current?.scrollToEnd({ animated: true })}
+        <ChatMessageList
+          messages={messages}
+          listRef={listRef}
+          defaultWingCode={wingCode}
         />
 
         <InputBox onSend={sendMessage} onVoiceRecorded={sendVoiceMessage} />
@@ -56,10 +58,5 @@ const styles = StyleSheet.create({
   },
   flex: {
     flex: 1,
-  },
-  list: {
-    flexGrow: 1,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
   },
 });

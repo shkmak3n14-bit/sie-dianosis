@@ -2,17 +2,22 @@
 // チャット吹き出し履歴の永続化（直近10件）
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import type { SiePersona } from '../bridge/sieResponse';
 
 export type ChatFlowMessage = {
   sender: 'user' | 'sie';
   text: string;
+  /** sie の flow ステップ名（任意） */
+  stepLabel?: string;
+  /** sie 発言時の人格情報（常に sie） */
+  persona?: Pick<SiePersona, 'id' | 'name' | 'tone' | 'wingCode'>;
 };
 
 const CHAT_HISTORY_KEY = 'sie_chat_history';
 const MAX_HISTORY = 10;
 
 export async function saveChatHistory(
-  history: ChatFlowMessage[]
+  history: ChatFlowMessage[],
 ): Promise<void> {
   try {
     const trimmed = history.slice(-MAX_HISTORY);

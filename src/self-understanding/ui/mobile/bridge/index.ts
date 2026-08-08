@@ -16,6 +16,17 @@ export {
   type UserEnneagramProfile,
 } from '../templates/sie_conversation';
 
+export type {
+  SieErrorResponse,
+  SieFailureResponse,
+  SiePersona,
+  SieRequest,
+  SieResponse,
+  SieSuccessResponse,
+} from './sieResponse';
+
+export { callSelfUnderstandingBridge } from './callSelfUnderstandingBridge';
+
 export {
   extractPsychoStructure,
   formatAdviceMessage,

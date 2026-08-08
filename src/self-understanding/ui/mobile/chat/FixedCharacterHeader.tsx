@@ -1,20 +1,27 @@
 import { StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-paper';
-import { CharacterAvatar } from '../character_view/CharacterAvatar';
 import { sieColors } from '../theme';
+import { SIE_AVATAR } from './sieAvatar';
 
 type Props = {
-  name: string;
+  /** 省略時は SIE_AVATAR.name */
+  name?: string;
+  subtitle?: string;
 };
 
-/** 画面上部に固定するキャラアイコン */
-export function FixedCharacterHeader({ name }: Props) {
+/** 画面上部に固定する sie ヘッダー */
+export function FixedCharacterHeader({
+  name = SIE_AVATAR.name,
+  subtitle = '自己理解チャット',
+}: Props) {
   return (
     <View style={styles.header}>
-      <CharacterAvatar name={name} size={52} />
+      <View style={[styles.avatar, { backgroundColor: SIE_AVATAR.color }]}>
+        <Text style={styles.icon}>{SIE_AVATAR.icon}</Text>
+      </View>
       <View style={styles.meta}>
-        <Text style={styles.name}>{name}</Text>
-        <Text style={styles.sub}>自己理解チャット</Text>
+        <Text style={[styles.name, { color: SIE_AVATAR.color }]}>{name}</Text>
+        <Text style={styles.sub}>{subtitle}</Text>
       </View>
     </View>
   );
@@ -31,11 +38,20 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: sieColors.border,
   },
+  avatar: {
+    width: 52,
+    height: 52,
+    borderRadius: 26,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  icon: {
+    fontSize: 24,
+  },
   meta: {
     gap: 2,
   },
   name: {
-    color: sieColors.accentStrong,
     fontWeight: '700',
     fontSize: 16,
   },
