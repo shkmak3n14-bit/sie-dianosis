@@ -1,8 +1,8 @@
-import { SAI_PERSONA_PROMPT } from '../data/sai_persona';
+import { SIE_PERSONA_PROMPT } from '../data/sie_persona';
 import type { ExampleStoryTemplate } from '../data/exampleStoryWeakness';
 
 
-export type SaiLlmPromptInput = {
+export type SieLlmPromptInput = {
   userQuestion: string;
   exampleStory: ExampleStoryTemplate['exampleStory'];
   userInput: string;
@@ -10,18 +10,18 @@ export type SaiLlmPromptInput = {
 };
 
 /** 例え話 → ユーザー入力 → LLM へ渡すプロンプトを組み立てる */
-export function buildSaiPrompt({
+export function buildSiePrompt({
   userQuestion,
   exampleStory,
   userInput,
   wingCode,
-}: SaiLlmPromptInput): string {
+}: SieLlmPromptInput): string {
   const exampleStoryText = [exampleStory.title, ...exampleStory.text].join('\n');
   const diagnosisLine = wingCode
     ? `ユーザーの診断結果: ${wingCode}`
     : 'ユーザーの診断結果: 未指定（一般的な構造で返答）';
 
-  return `${SAI_PERSONA_PROMPT}
+  return `${SIE_PERSONA_PROMPT}
 
 ---
 ${diagnosisLine}

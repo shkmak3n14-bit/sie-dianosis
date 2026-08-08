@@ -17,8 +17,8 @@ import type { ConversationPhase } from './phase_detector';
 import { detectPhaseLLM } from './phase/detectPhaseLLM';
 import {
   adjustPhaseWithState,
-  type SaiConversationState,
-} from './sai_state';
+  type SieConversationState,
+} from './sie_state';
 import { detectToneLLM } from './tone/detectToneLLM';
 import type {
   GeneratedResponse,
@@ -28,7 +28,7 @@ import type {
 export type GenerateResponseResult = {
   text: string;
   phase: ConversationPhase;
-  state: SaiConversationState;
+  state: SieConversationState;
 };
 
 /**
@@ -38,10 +38,10 @@ export type GenerateResponseResult = {
 export async function generateResponse(
   userInput: string,
   profile: UserEnneagramProfile,
-  state: SaiConversationState
+  state: SieConversationState
 ): Promise<GenerateResponseResult> {
   // 入力 state を破壊しないようコピーしてから更新する
-  const nextState: SaiConversationState = {
+  const nextState: SieConversationState = {
     lastPhase: state.lastPhase,
     adviceDelivered: state.adviceDelivered,
     conversationHistory: [...state.conversationHistory],

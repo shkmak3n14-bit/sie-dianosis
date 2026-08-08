@@ -1,4 +1,4 @@
-﻿# self-understanding（自己理解モジュール）
+# self-understanding（自己理解モジュール）
 
 タイプ診断結果を踏まえた自己理解を担当する Context です。
 **スマホ利用を前提**とし、ロジック（`core`）とモバイルUI（`ui/mobile`）を分離しています。
@@ -31,7 +31,7 @@ self-understanding/
         ├── chat/
         ├── bridge/       # preview API（Expo 用スタブ）
         ├── templates/    # UI 用型
-        ├── data/         # 静的コピー（sai_persona 等）
+        ├── data/         # 静的コピー（sie_persona 等）
         ├── components/
         ├── flow/
         └── mocks/

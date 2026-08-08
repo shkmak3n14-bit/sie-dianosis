@@ -1,4 +1,5 @@
 import { replaceAbstractTerms } from './abstractToBehavior';
+import { applyCategoryTemplate } from './categoryTemplates';
 import type { MutualUnderstanding } from '../../templates/mutual_understanding';
 
 export type MuUiCategoryKey =
@@ -20,9 +21,10 @@ export type MuUiCategoryKey =
  */
 export function formatDictionaryItemToUiText(
   raw: string,
-  _category: MuUiCategoryKey = 'generic',
+  category: MuUiCategoryKey = 'generic',
 ): string {
-  return replaceAbstractTerms(raw).trim();
+  const replaced = replaceAbstractTerms(raw).trim();
+  return applyCategoryTemplate(replaced, category);
 }
 
 /**

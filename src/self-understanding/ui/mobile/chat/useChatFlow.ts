@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import {
   EMPTY_PSYCHO_STRUCTURE,
   buildUserEnneagramProfile,
-  createEmptySaiConversationState,
+  createEmptySieConversationState,
   extractPsychoStructure,
   formatAdviceMessage,
   generateAdvice,
@@ -16,7 +16,7 @@ import {
   writeResponse,
   type PsychoStructure,
   type ResponsePersonaContext,
-  type SaiConversationState,
+  type SieConversationState,
 } from '../bridge';
 import { selfUnderstandingMock } from '../mocks/selfUnderstandingMock';
 import {
@@ -24,7 +24,7 @@ import {
   saveChatHistory,
   type ChatFlowMessage,
 } from './chatHistoryStorage';
-import { loadSaiState, saveSaiState } from './saiStateStorage';
+import { loadSieState, saveSieState } from './sieStateStorage';
 
 export type { ChatFlowMessage };
 
@@ -36,7 +36,7 @@ type ConversationContext = {
   persona: ResponsePersonaContext | null;
   /** 対話中に蓄積する心理構造 */
   psychology: PsychoStructure;
-  /** flow 完了後の助言をすでに出したか（saiState と同期） */
+  /** flow 完了後の助言をすでに出したか（sieState と同期） */
   adviceDelivered: boolean;
 };
 
@@ -52,10 +52,10 @@ export function useChatFlow(options: UseChatFlowOptions = {}) {
 
   const [messages, setMessages] = useState<ChatFlowMessage[]>([]);
   const messagesRef = useRef<ChatFlowMessage[]>([]);
-  const [saiState, setSaiState] = useState<SaiConversationState>(
-    createEmptySaiConversationState
+  const [sieState, setSieState] = useState<SieConversationState>(
+    createEmptySieConversationState
   );
-  const [saiStateReady, setSaiStateReady] = useState(false);
+  const [sieStateReady, setSieStateReady] = useState(false);
   const [context, setContext] = useState<ConversationContext>({
     type: null,
     label: null,
@@ -71,7 +71,7 @@ export function useChatFlow(options: UseChatFlowOptions = {}) {
 
     void (async () => {
       const [loadedState, loadedMessages] = await Promise.all([
-        loadSaiState(),
+        loadSieState(),
         loadChatHistory(),
       ]);
       if (cancelled) {
@@ -79,12 +79,12 @@ export function useChatFlow(options: UseChatFlowOptions = {}) {
       }
       messagesRef.current = loadedMessages;
       setMessages(loadedMessages);
-      setSaiState(loadedState);
+      setSieState(loadedState);
       setContext((prev) => ({
         ...prev,
         adviceDelivered: loadedState.adviceDelivered,
       }));
-      setSaiStateReady(true);
+      setSieStateReady(true);
     })();
 
     return () => {
@@ -93,9 +93,9 @@ export function useChatFlow(options: UseChatFlowOptions = {}) {
   }, []);
 
   /** state をメモリと AsyncStorage の両方に反映 */
-  const commitSaiState = async (next: SaiConversationState) => {
-    setSaiState(next);
-    await saveSaiState(next);
+  const commitSieState = async (next: SieConversationState) => {
+    setSieState(next);
+    await saveSieState(next);
   };
 
   /** メッセージを更新し、直近10件を永続化 */
@@ -140,8 +140,8 @@ export function useChatFlow(options: UseChatFlowOptions = {}) {
         ...prev,
         adviceDelivered: true,
       }));
-      await commitSaiState({
-        ...saiState,
+      await commitSieState({
+        ...sieState,
         adviceDelivered: true,
         lastPhase: 'advice',
       });
@@ -179,12 +179,12 @@ export function useChatFlow(options: UseChatFlowOptions = {}) {
 
     // ⑤ フェーズ判定：advice / deepening / conversation → respond へ
     // 起動直後のレースを避けるため、未準備ならストレージから再読込
-    const activeState = saiStateReady ? saiState : await loadSaiState();
+    const activeState = sieStateReady ? sieState : await loadSieState();
     const {
       text: sieReply,
-      state: nextSaiState,
+      state: nextSieState,
     } = await respond(text, userProfile, activeState);
-    await commitSaiState(nextSaiState);
+    await commitSieState(nextSieState);
     await commitMessages((prev) => [
       ...prev,
       { sender: 'sie', text: sieReply },
@@ -196,7 +196,7 @@ export function useChatFlow(options: UseChatFlowOptions = {}) {
       remainingSteps: [],
       persona: null,
       psychology,
-      adviceDelivered: nextSaiState.adviceDelivered,
+      adviceDelivered: nextSieState.adviceDelivered,
     }));
   };
 
@@ -206,15 +206,15 @@ export function useChatFlow(options: UseChatFlowOptions = {}) {
    */
   const sendVoiceMessage = async (audioUri: string) => {
     try {
-      const activeState = saiStateReady ? saiState : await loadSaiState();
-      const { text, userInput, state: nextSaiState } = await respondVoiceInput(
+      const activeState = sieStateReady ? sieState : await loadSieState();
+      const { text, userInput, state: nextSieState } = await respondVoiceInput(
         audioUri,
         userProfile,
         activeState
       );
 
       const spoken = userInput.trim() || '（音声を認識できませんでした）';
-      await commitSaiState(nextSaiState);
+      await commitSieState(nextSieState);
       await commitMessages((prev) => [
         ...prev,
         { sender: 'user', text: spoken },
@@ -226,7 +226,7 @@ export function useChatFlow(options: UseChatFlowOptions = {}) {
         label: null,
         remainingSteps: [],
         persona: null,
-        adviceDelivered: nextSaiState.adviceDelivered,
+        adviceDelivered: nextSieState.adviceDelivered,
       }));
     } catch (error) {
       const message =
@@ -236,7 +236,7 @@ export function useChatFlow(options: UseChatFlowOptions = {}) {
         {
           sender: 'sie',
           text:
-            message === 'SAI_STT_ENDPOINT_NOT_SET'
+            message === 'SIE_STT_ENDPOINT_NOT_SET'
               ? '音声認識の接続先がまだ設定されていないよ。テキストで話してくれると助かるな。'
               : '音声の取り込みに失敗したみたい。もう一度試すか、テキストで送ってみてね。',
         },
@@ -249,7 +249,7 @@ export function useChatFlow(options: UseChatFlowOptions = {}) {
     sendMessage,
     sendVoiceMessage,
     context,
-    saiState,
-    saiStateReady,
+    sieState,
+    sieStateReady,
   };
 }

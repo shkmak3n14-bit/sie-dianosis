@@ -7,13 +7,13 @@ import { findUnderstandingItem } from '../data/understandingCheck9w8';
 import type { SelfUnderstandingStackParamList } from '../flow/types';
 import { sieColors } from '../theme';
 
-type Props = NativeStackScreenProps<SelfUnderstandingStackParamList, 'AskSaiTemplates'>;
+type Props = NativeStackScreenProps<SelfUnderstandingStackParamList, 'AskSieTemplates'>;
 
 /**
  * ③ サイに質問する画面
  * 項目選択直後に質問テンプレートを 3〜5 個表示する
  */
-export function AskSaiTemplatesScreen({ navigation, route }: Props) {
+export function AskSieTemplatesScreen({ navigation, route }: Props) {
   const item = findUnderstandingItem(route.params.categoryId, route.params.itemId);
 
   useLayoutEffect(() => {

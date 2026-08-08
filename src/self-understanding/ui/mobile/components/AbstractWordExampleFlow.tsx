@@ -13,7 +13,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import type { ExampleStoryTemplate } from '../data/exampleStoryWeakness';
 import { EXAMPLE_STORY_WEAKNESS } from '../data/exampleStoryWeakness';
-import { askSaiLlm } from '../logic/askSaiLlm';
+import { askSieLlm } from '../logic/askSieLlm';
 import { sieColors } from '../theme';
 
 type Phase = 'story' | 'followups' | 'input' | 'loading' | 'reply';
@@ -26,7 +26,7 @@ type Props = {
 
 type Bubble = {
   id: string;
-  role: 'sai' | 'user';
+  role: 'sie' | 'user';
   text: string;
 };
 
@@ -65,7 +65,7 @@ export function AbstractWordExampleFlow({
         ...prev,
         {
           id: createId('s'),
-          role: 'sai',
+          role: 'sie',
           text: formatExampleStory(template),
         },
       ]);
@@ -91,7 +91,7 @@ export function AbstractWordExampleFlow({
         ...prev,
         {
           id: createId('s'),
-          role: 'sai',
+          role: 'sie',
           text: followUps[followUpIndex],
         },
       ]);
@@ -123,7 +123,7 @@ export function AbstractWordExampleFlow({
     setDraft('');
     setPhase('loading');
 
-    const { reply } = await askSaiLlm({
+    const { reply } = await askSieLlm({
       userQuestion: question,
       exampleStory: template.exampleStory,
       userInput,
@@ -131,7 +131,7 @@ export function AbstractWordExampleFlow({
 
     setBubbles((prev) => [
       ...prev,
-      { id: createId('s'), role: 'sai', text: reply },
+      { id: createId('s'), role: 'sie', text: reply },
     ]);
     setPhase('reply');
   };
@@ -157,13 +157,13 @@ export function AbstractWordExampleFlow({
             <View
               style={[
                 styles.bubble,
-                item.role === 'user' ? styles.userBubble : styles.saiBubble,
+                item.role === 'user' ? styles.userBubble : styles.sieBubble,
               ]}
             >
               <Text
                 style={[
                   styles.bubbleText,
-                  item.role === 'user' ? styles.userText : styles.saiText,
+                  item.role === 'user' ? styles.userText : styles.sieText,
                 ]}
               >
                 {item.text}
@@ -241,7 +241,7 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     borderWidth: 1,
   },
-  saiBubble: {
+  sieBubble: {
     alignSelf: 'flex-start',
     backgroundColor: sieColors.surface,
     borderColor: sieColors.border,
@@ -255,7 +255,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     lineHeight: 24,
   },
-  saiText: {
+  sieText: {
     color: sieColors.text,
   },
   userText: {

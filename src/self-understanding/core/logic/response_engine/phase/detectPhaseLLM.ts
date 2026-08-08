@@ -14,7 +14,7 @@ export type { ConversationPhase };
 export async function detectPhaseLLM(
   userInput: string
 ): Promise<ConversationPhase> {
-  const raw = !process.env.EXPO_PUBLIC_SAI_LLM_ENDPOINT
+  const raw = !process.env.EXPO_PUBLIC_SIE_LLM_ENDPOINT
     ? mockPhaseJson(userInput)
     : await callLLMForPhase(userInput);
 

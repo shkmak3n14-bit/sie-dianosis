@@ -2,7 +2,7 @@
 
 | ファイル | 正本 | 用途 |
 |----------|------|------|
-| `sai_persona.ts` | `core/character/sai_persona.ts` | LLM プロンプト用人格文 |
+| `sie_persona.ts` | `core/character/sie_persona.ts` | LLM プロンプト用人格文 |
 
 ```bash
 npm run sync:data

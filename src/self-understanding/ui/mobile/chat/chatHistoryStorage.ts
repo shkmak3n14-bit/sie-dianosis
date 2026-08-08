@@ -8,7 +8,7 @@ export type ChatFlowMessage = {
   text: string;
 };
 
-const CHAT_HISTORY_KEY = 'sai_chat_history';
+const CHAT_HISTORY_KEY = 'sie_chat_history';
 const MAX_HISTORY = 10;
 
 export async function saveChatHistory(

@@ -12,7 +12,7 @@ export type { ToneType };
  * 失敗時・不正値時は calm にフォールバック。
  */
 export async function detectToneLLM(userInput: string): Promise<ToneType> {
-  const raw = !process.env.EXPO_PUBLIC_SAI_LLM_ENDPOINT
+  const raw = !process.env.EXPO_PUBLIC_SIE_LLM_ENDPOINT
     ? mockToneJson(userInput)
     : await callLLMForTone(userInput);
 

@@ -3,8 +3,8 @@
  * UI（mobile）からは直接 import しない。ホストアプリ経由で接続する。
  */
 
-export { SAI_PERSONA_PROMPT, buildPromptWithPersona } from './character/sai_persona';
-export type { SaiPersonaOptions } from './character/sai_persona';
+export { SIE_PERSONA_PROMPT, buildPromptWithPersona } from './character/sie_persona';
+export type { SiePersonaOptions } from './character/sie_persona';
 
 export {
   formatAdviceMessage,
@@ -28,13 +28,13 @@ export { toSpeechFriendly } from './logic/speech_summarizer';
 
 export {
   buildUserEnneagramProfile,
-  createEmptySaiConversationState,
+  createEmptySieConversationState,
   generateResponse,
 } from './logic/response_engine';
 export type {
   ConversationPhase,
   ResponsePersonaContext,
-  SaiConversationState,
+  SieConversationState,
   ToneType,
   UserEnneagramProfile,
 } from './logic/response_engine';

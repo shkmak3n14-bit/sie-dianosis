@@ -1,6 +1,6 @@
-import { buildPromptWithPersona, type SaiPersonaOptions } from '../character/sai_persona';
+import { buildPromptWithPersona, type SiePersonaOptions } from '../character/sie_persona';
 
-export type CallLlmOptions = SaiPersonaOptions & {
+export type CallLlmOptions = SiePersonaOptions & {
   /** false のとき人格プロンプトを付与しない（既定: true） */
   includePersona?: boolean;
 };
@@ -23,10 +23,10 @@ export async function callLLM(prompt: string, options: CallLlmOptions = {}): Pro
 }
 
 async function fetchLlmReply(prompt: string): Promise<string> {
-  const endpoint = process.env.EXPO_PUBLIC_SAI_LLM_ENDPOINT;
+  const endpoint = process.env.EXPO_PUBLIC_SIE_LLM_ENDPOINT;
 
   if (!endpoint) {
-    throw new Error('SAI_LLM_ENDPOINT_NOT_SET');
+    throw new Error('SIE_LLM_ENDPOINT_NOT_SET');
   }
 
   const response = await fetch(endpoint, {
@@ -36,14 +36,14 @@ async function fetchLlmReply(prompt: string): Promise<string> {
   });
 
   if (!response.ok) {
-    throw new Error(`SAI_LLM_HTTP_${response.status}`);
+    throw new Error(`SIE_LLM_HTTP_${response.status}`);
   }
 
   const data = (await response.json()) as { reply?: string; text?: string };
   const reply = data.reply ?? data.text;
 
   if (!reply?.trim()) {
-    throw new Error('SAI_LLM_EMPTY_REPLY');
+    throw new Error('SIE_LLM_EMPTY_REPLY');
   }
 
   return reply.trim();

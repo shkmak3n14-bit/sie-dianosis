@@ -5,12 +5,12 @@ export type SpeechAudioInput = Blob | string;
 
 /**
  * 音声（Blob またはローカル URI）をテキストに変換する。
- * EXPO_PUBLIC_SAI_STT_ENDPOINT が未設定の場合はエラー。
+ * EXPO_PUBLIC_SIE_STT_ENDPOINT が未設定の場合はエラー。
  */
 export async function speechToText(audio: SpeechAudioInput): Promise<string> {
-  const endpoint = process.env.EXPO_PUBLIC_SAI_STT_ENDPOINT;
+  const endpoint = process.env.EXPO_PUBLIC_SIE_STT_ENDPOINT;
   if (!endpoint) {
-    throw new Error('SAI_STT_ENDPOINT_NOT_SET');
+    throw new Error('SIE_STT_ENDPOINT_NOT_SET');
   }
 
   const body = buildRequestBody(audio);
@@ -21,7 +21,7 @@ export async function speechToText(audio: SpeechAudioInput): Promise<string> {
   });
 
   if (!response.ok) {
-    throw new Error(`SAI_STT_HTTP_${response.status}`);
+    throw new Error(`SIE_STT_HTTP_${response.status}`);
   }
 
   const data = (await response.json()) as { text?: string };

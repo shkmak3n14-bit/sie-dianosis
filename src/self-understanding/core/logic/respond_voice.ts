@@ -2,7 +2,7 @@
 // 音声入力専用の入口
 
 import { generateResponse } from './response_engine/generate';
-import type { SaiConversationState } from './response_engine/sai_state';
+import type { SieConversationState } from './response_engine/sie_state';
 import type { UserEnneagramProfile } from './response_engine/types';
 import { speechToText, type SpeechAudioInput } from './speech_to_text';
 
@@ -13,7 +13,7 @@ import { speechToText, type SpeechAudioInput } from './speech_to_text';
 export async function respondVoiceInput(
   audio: SpeechAudioInput,
   profile: UserEnneagramProfile,
-  state: SaiConversationState
+  state: SieConversationState
 ) {
   // ① 音声 → テキスト化
   const userInput = await speechToText(audio);

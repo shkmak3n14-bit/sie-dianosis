@@ -1,6 +1,6 @@
 /**
  * core → ui/mobile 同期
- * - data/sai_persona.ts（character 正本のコピー）
+ * - data/sie_persona.ts（character 正本のコピー）
  */
 const fs = require('fs');
 const path = require('path');
@@ -10,8 +10,8 @@ const coreRoot = path.resolve(mobileRoot, '../../core');
 
 const COPIES = [
   {
-    from: path.join(coreRoot, 'character/sai_persona.ts'),
-    to: path.join(mobileRoot, 'data/sai_persona.ts'),
+    from: path.join(coreRoot, 'character/sie_persona.ts'),
+    to: path.join(mobileRoot, 'data/sie_persona.ts'),
   },
 ];
 

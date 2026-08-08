@@ -1,8 +1,8 @@
-import { buildSaiPrompt, type SaiLlmPromptInput } from './buildSaiPrompt';
+import { buildSiePrompt, type SieLlmPromptInput } from './buildSiePrompt';
 
-export type SaiLlmRequest = SaiLlmPromptInput;
+export type SieLlmRequest = SieLlmPromptInput;
 
-export type SaiLlmResponse = {
+export type SieLlmResponse = {
   prompt: string;
   reply: string;
 };
@@ -10,28 +10,28 @@ export type SaiLlmResponse = {
 /**
  * LLM 呼び出し。
  * 実API未接続時はモック返答を返す。
- * 接続時は `fetchSaiLlmReply` 内の fetch 先を差し替える。
+ * 接続時は `fetchSieLlmReply` 内の fetch 先を差し替える。
  */
-export async function askSaiLlm(input: SaiLlmRequest): Promise<SaiLlmResponse> {
-  const prompt = buildSaiPrompt(input);
+export async function askSieLlm(input: SieLlmRequest): Promise<SieLlmResponse> {
+  const prompt = buildSiePrompt(input);
 
   try {
-    const reply = await fetchSaiLlmReply(prompt);
+    const reply = await fetchSieLlmReply(prompt);
     return { prompt, reply };
   } catch {
     return {
       prompt,
-      reply: buildMockSaiReply(input),
+      reply: buildMockSieReply(input),
     };
   }
 }
 
-async function fetchSaiLlmReply(prompt: string): Promise<string> {
-  const endpoint = process.env.EXPO_PUBLIC_SAI_LLM_ENDPOINT;
+async function fetchSieLlmReply(prompt: string): Promise<string> {
+  const endpoint = process.env.EXPO_PUBLIC_SIE_LLM_ENDPOINT;
 
   if (!endpoint) {
     // API未設定: モックへフォールバック
-    throw new Error('SAI_LLM_ENDPOINT_NOT_SET');
+    throw new Error('SIE_LLM_ENDPOINT_NOT_SET');
   }
 
   const response = await fetch(endpoint, {
@@ -41,20 +41,20 @@ async function fetchSaiLlmReply(prompt: string): Promise<string> {
   });
 
   if (!response.ok) {
-    throw new Error(`SAI_LLM_HTTP_${response.status}`);
+    throw new Error(`SIE_LLM_HTTP_${response.status}`);
   }
 
   const data = (await response.json()) as { reply?: string; text?: string };
   const reply = data.reply ?? data.text;
 
   if (!reply?.trim()) {
-    throw new Error('SAI_LLM_EMPTY_REPLY');
+    throw new Error('SIE_LLM_EMPTY_REPLY');
   }
 
   return reply.trim();
 }
 
-function buildMockSaiReply(input: SaiLlmRequest): string {
+function buildMockSieReply(input: SieLlmRequest): string {
   const word = input.userQuestion.trim() || 'その言葉';
   const note = input.userInput.trim()
     ? `あなたが書いてくれた「${input.userInput.trim()}」からも、似た緊張が感じられます。`

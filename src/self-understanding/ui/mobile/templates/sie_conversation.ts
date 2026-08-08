@@ -6,7 +6,7 @@
 export type ConversationPhase = 'conversation' | 'deepening' | 'advice';
 export type ToneType = 'soft' | 'calm' | 'voice';
 
-export type SaiConversationState = {
+export type SieConversationState = {
   lastPhase: ConversationPhase | null;
   adviceDelivered: boolean;
   conversationHistory: string[];
@@ -41,7 +41,7 @@ export const EMPTY_PSYCHO_STRUCTURE: PsychoStructure = {
   action: null,
 };
 
-export function createEmptySaiConversationState(): SaiConversationState {
+export function createEmptySieConversationState(): SieConversationState {
   return {
     lastPhase: null,
     adviceDelivered: false,

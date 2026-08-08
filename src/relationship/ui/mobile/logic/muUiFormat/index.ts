@@ -14,6 +14,8 @@ export {
   type UiMuStages,
 } from './composeUiStages';
 
+export { applyCategoryTemplate } from './categoryTemplates';
+
 export {
   formatDictionaryItemToUiStages,
   formatDictionaryItemToUiText,

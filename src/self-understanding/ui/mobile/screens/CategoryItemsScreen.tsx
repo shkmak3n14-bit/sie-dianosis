@@ -11,7 +11,7 @@ type Props = NativeStackScreenProps<SelfUnderstandingStackParamList, 'CategoryIt
 
 /**
  * ② カテゴリ項目一覧画面
- * 項目を押すと AskSaiTemplates へ遷移する
+ * 項目を押すと AskSieTemplates へ遷移する
  */
 export function CategoryItemsScreen({ navigation, route }: Props) {
   const category = findUnderstandingCategory(route.params.categoryId);
@@ -41,7 +41,7 @@ export function CategoryItemsScreen({ navigation, route }: Props) {
             label={item.label}
             body={item.body}
             onPress={() =>
-              navigation.navigate('AskSaiTemplates', {
+              navigation.navigate('AskSieTemplates', {
                 categoryId: category.id,
                 itemId: item.id,
               })

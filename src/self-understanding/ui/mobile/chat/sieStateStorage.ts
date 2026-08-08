@@ -1,55 +1,55 @@
-// saiStateStorage.ts
-// SaiConversationState の永続化（長期相談モード）
+// sieStateStorage.ts
+// SieConversationState の永続化（長期相談モード）
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
-  createEmptySaiConversationState,
+  createEmptySieConversationState,
   type ConversationPhase,
-  type SaiConversationState,
+  type SieConversationState,
   type ToneType,
 } from '../bridge';
 
-const SAI_STATE_KEY = 'sai_state';
+const SIE_STATE_KEY = 'sie_state';
 
 const PHASES: ConversationPhase[] = ['conversation', 'deepening', 'advice'];
 const TONES: ToneType[] = ['soft', 'calm', 'voice'];
 
-export async function saveSaiState(state: SaiConversationState): Promise<void> {
+export async function saveSieState(state: SieConversationState): Promise<void> {
   try {
-    await AsyncStorage.setItem(SAI_STATE_KEY, JSON.stringify(state));
+    await AsyncStorage.setItem(SIE_STATE_KEY, JSON.stringify(state));
   } catch {
     // 保存失敗しても会話自体は止めない
   }
 }
 
-export async function loadSaiState(): Promise<SaiConversationState> {
+export async function loadSieState(): Promise<SieConversationState> {
   try {
-    const raw = await AsyncStorage.getItem(SAI_STATE_KEY);
+    const raw = await AsyncStorage.getItem(SIE_STATE_KEY);
     if (!raw) {
-      return createEmptySaiConversationState();
+      return createEmptySieConversationState();
     }
-    return normalizeSaiState(JSON.parse(raw));
+    return normalizeSieState(JSON.parse(raw));
   } catch {
-    return createEmptySaiConversationState();
+    return createEmptySieConversationState();
   }
 }
 
-export async function clearSaiState(): Promise<void> {
+export async function clearSieState(): Promise<void> {
   try {
-    await AsyncStorage.removeItem(SAI_STATE_KEY);
+    await AsyncStorage.removeItem(SIE_STATE_KEY);
   } catch {
     // ignore
   }
 }
 
 /** 壊れた保存データでも安全に使える形へ整える */
-function normalizeSaiState(raw: unknown): SaiConversationState {
-  const empty = createEmptySaiConversationState();
+function normalizeSieState(raw: unknown): SieConversationState {
+  const empty = createEmptySieConversationState();
   if (!raw || typeof raw !== 'object') {
     return empty;
   }
 
-  const data = raw as Partial<SaiConversationState>;
+  const data = raw as Partial<SieConversationState>;
   const lastPhase =
     data.lastPhase === null ||
     (typeof data.lastPhase === 'string' &&

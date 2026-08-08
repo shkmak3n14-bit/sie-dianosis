@@ -8,9 +8,9 @@ import {
   EMPTY_PSYCHO_STRUCTURE,
   type PsychoStructure,
   type ResponsePersonaContext,
-  type SaiConversationState,
+  type SieConversationState,
   type UserEnneagramProfile,
-} from '../templates/sai_conversation';
+} from '../templates/sie_conversation';
 
 export type GeneratedAdvice = {
   summary: string;
@@ -69,8 +69,8 @@ export function generateFollowUp(_structure: PsychoStructure): string | null {
 export async function respond(
   userInput: string,
   profile: UserEnneagramProfile,
-  state: SaiConversationState,
-): Promise<{ text: string; state: SaiConversationState }> {
+  state: SieConversationState,
+): Promise<{ text: string; state: SieConversationState }> {
   const reply = `（プレビュー／タイプ${profile.wing ?? profile.type}）「${userTextPreview(userInput)}」について、もう少し状況を教えてくれると整理しやすいよ。`;
   return {
     text: reply,
@@ -85,8 +85,8 @@ export async function respond(
 export async function respondVoiceInput(
   _audioUri: string,
   profile: UserEnneagramProfile,
-  state: SaiConversationState,
-): Promise<{ text: string; userInput: string; state: SaiConversationState }> {
+  state: SieConversationState,
+): Promise<{ text: string; userInput: string; state: SieConversationState }> {
   const userInput = '';
   const { text, state: next } = await respond(
     '（音声プレビュー）',

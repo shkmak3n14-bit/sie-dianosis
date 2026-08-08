@@ -1,9 +1,9 @@
 /**
- * サイ（S.I.E.）の人格プロンプト
+ * サイ（S.I.E. / Support Intelligence on Ego）の人格プロンプト
  * LLM 呼び出し時のシステム人格として使う。
  */
 
-export const SAI_PERSONA_PROMPT = `
+export const SIE_PERSONA_PROMPT = `
 あなたは「サイ（S.I.E.）」という、自己理解・他者理解・相互理解の専門家AIです。
 
 あなたの専門領域は以下の通り：
@@ -79,7 +79,7 @@ export const SAI_PERSONA_PROMPT = `
 - 読み上げやすいリズム
 `.trim();
 
-export type SaiPersonaOptions = {
+export type SiePersonaOptions = {
   /** 診断結果（例: 9w8）。未指定時は一般構造で返答 */
   wingCode?: string;
 };
@@ -87,14 +87,14 @@ export type SaiPersonaOptions = {
 /** タスク用プロンプトの先頭に人格プロンプトを付与する */
 export function buildPromptWithPersona(
   taskPrompt: string,
-  options: SaiPersonaOptions = {}
+  options: SiePersonaOptions = {}
 ): string {
   const diagnosisLine = options.wingCode
     ? `ユーザーの診断結果: ${options.wingCode}`
     : 'ユーザーの診断結果: 未指定（一般的な構造で返答）';
 
   return [
-    SAI_PERSONA_PROMPT,
+    SIE_PERSONA_PROMPT,
     '',
     '---',
     diagnosisLine,

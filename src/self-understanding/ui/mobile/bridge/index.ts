@@ -4,17 +4,17 @@
  */
 
 export {
-  createEmptySaiConversationState,
+  createEmptySieConversationState,
   buildUserEnneagramProfile,
   EMPTY_PSYCHO_STRUCTURE,
   mergePsychoStructure,
   type ConversationPhase,
   type PsychoStructure,
   type ResponsePersonaContext,
-  type SaiConversationState,
+  type SieConversationState,
   type ToneType,
   type UserEnneagramProfile,
-} from '../templates/sai_conversation';
+} from '../templates/sie_conversation';
 
 export {
   extractPsychoStructure,

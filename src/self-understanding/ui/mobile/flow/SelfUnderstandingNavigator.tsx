@@ -1,7 +1,7 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { AbstractWordExampleScreen } from '../screens/AbstractWordExampleScreen';
-import { AskSaiTemplatesScreen } from '../screens/AskSaiTemplatesScreen';
+import { AskSieTemplatesScreen } from '../screens/AskSieTemplatesScreen';
 import { CategoryItemsScreen } from '../screens/CategoryItemsScreen';
 import ChatScreen from '../chat/ChatScreen';
 import { DeepDiveCardsScreen } from '../screens/DeepDiveCardsScreen';
@@ -35,8 +35,8 @@ export function SelfUnderstandingNavigator() {
           options={{ title: '項目一覧' }}
         />
         <Stack.Screen
-          name="AskSaiTemplates"
-          component={AskSaiTemplatesScreen}
+          name="AskSieTemplates"
+          component={AskSieTemplatesScreen}
           options={{ title: 'サイに質問する' }}
         />
         <Stack.Screen

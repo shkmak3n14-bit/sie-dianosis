@@ -1,17 +1,17 @@
-// response_engine/sai_state.ts
+// response_engine/sie_state.ts
 // generateResponse 外側で保持する会話ログ（state）
 
 import type { ConversationPhase } from './phase_detector';
 import type { ToneType } from './tone_detector';
 
-export type SaiConversationState = {
+export type SieConversationState = {
   lastPhase: ConversationPhase | null;
   adviceDelivered: boolean;
   conversationHistory: string[]; // 直近3〜5ターン
   emotionTrend: ToneType[]; // soft / calm / voice の推移
 };
 
-export function createEmptySaiConversationState(): SaiConversationState {
+export function createEmptySieConversationState(): SieConversationState {
   return {
     lastPhase: null,
     adviceDelivered: false,
@@ -25,7 +25,7 @@ export function createEmptySaiConversationState(): SaiConversationState {
  */
 export function adjustPhaseWithState(
   phase: ConversationPhase,
-  state: SaiConversationState
+  state: SieConversationState
 ): ConversationPhase {
   // ① 直前が advice の場合、連続 advice を防ぐ
   if (state.lastPhase === 'advice' && phase === 'advice') {
